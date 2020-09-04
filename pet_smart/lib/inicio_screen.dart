@@ -47,22 +47,59 @@ class TelaInicial extends StatelessWidget {
                 children: [
                 FlatButton(child: Text('Iniciando', style: TextStyle(fontSize: 18),),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(80),
                 ),
                   padding: const EdgeInsets.all(15),
                   color: Theme.of(context).primaryColor,
                   textColor: Colors.white,
-                  onPressed: (){},
+                  onPressed: (){
+                  //Navegar para tela login
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LogScreen()),
+                    );// Navigator
+                  },
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                   Text('Já possui uma conta?', style: TextStyle(fontSize: 18) ,),
-                  FlatButton(child: Text('Entrar', style: TextStyle(fontSize: 18),),),
+                  FlatButton(child: Text('Entrar', style: TextStyle(fontSize: 18),),
+                  onPressed: (){} ,
+                  ),
                 ],)
               ],)
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class LogScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    child: Text('Login PetSmart', style: TextStyle(fontSize: 24,
+                    color: Colors.black54.withOpacity(0.5)
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
