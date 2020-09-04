@@ -1,88 +1,78 @@
 import 'package:flutter/material.dart';
+import './login_screen.dart';
 
-class TelaInicial extends StatelessWidget {
+class TelaInicial extends StatefulWidget {
+
+  @override
+  _TelaInicialState createState() => _TelaInicialState();
+}
+
+class _TelaInicialState extends State<TelaInicial> {
+
+  Widget _buildJaPossuiConta() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text('Já possui uma conta?', style: TextStyle(fontSize: 18) ,),
+        FlatButton(child: Text('Entrar', style: TextStyle(fontSize: 18),),
+          onPressed: (){} ,
+        ),
+      ],);
+  }
+
+  Widget _buildBotaoIniciando() {
+    return FlatButton(child: Text('Iniciando', style: TextStyle(fontSize: 18),),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(80),
+      ),
+      padding: const EdgeInsets.all(15),
+      color: Theme.of(context).primaryColor,
+      textColor: Colors.white,
+      onPressed: (){
+        //Navegar para tela login
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );// Navigator
+      },
+    );
+  }
+
+  Widget _buildDesc(){
+    return Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porttitor mi vitae arcu vestibulum, non gravida ante facilisis.',
+      textAlign: TextAlign.left,
+    );
+  }
+
+  Widget _buildTitulo(){
+    return Container(
+      alignment: Alignment.centerLeft,
+      child: Text('PetSmart', style: TextStyle(fontSize: 24,
+        color: Theme.of(context).primaryColor,
+      ),
+      ),
+    );
+  }
+
+  Widget _buildLogo(){
+    return Container(
+      width: 300,
+      height: 300,
+      decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          image: DecorationImage(image: AssetImage('assets/Imagens/logo.png'),
+            fit: BoxFit.cover,
+          )
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
       body: Container(
+        margin: EdgeInsets.all(20),
         //Cor para o background
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: 200,
-                      height: 200,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          image: DecorationImage(image: AssetImage('assets/Imagens/logo.png'),
-                            fit: BoxFit.cover,
-                          )
-                      ),
-                    ),
-                    //Nome do app (PetSmart)
-                    SizedBox(height: 50),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text('PetSmart', style: TextStyle(fontSize: 24,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      ),
-                    ),
-                    SizedBox(height: 5,),
-                    Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porttitor mi vitae arcu vestibulum, non gravida ante facilisis.',
-                      textAlign: TextAlign.left,
-                    ),
-                  ],
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                FlatButton(child: Text('Iniciando', style: TextStyle(fontSize: 18),),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(80),
-                ),
-                  padding: const EdgeInsets.all(15),
-                  color: Theme.of(context).primaryColor,
-                  textColor: Colors.white,
-                  onPressed: (){
-                  //Navegar para tela login
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LogScreen()),
-                    );// Navigator
-                  },
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                  Text('Já possui uma conta?', style: TextStyle(fontSize: 18) ,),
-                  FlatButton(child: Text('Entrar', style: TextStyle(fontSize: 18),),
-                  onPressed: (){} ,
-                  ),
-                ],)
-              ],)
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class LogScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.white,
         child: Column(
           children: <Widget>[
             Expanded(
@@ -90,15 +80,25 @@ class LogScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Container(
-                    child: Text('Login PetSmart', style: TextStyle(fontSize: 24,
-                    color: Colors.black54.withOpacity(0.5)
-                      ),
-                    ),
-                  ),
+                  //Carregando a foto
+                  SizedBox(height: 90,),
+                  //Carregar a imagem
+                  _buildLogo(),
+                  SizedBox(height: 80),
+                  //Titulo
+                 _buildTitulo(),
+                  SizedBox(height: 5,),
+                  //Descriçao
+                  _buildDesc(),
                 ],
               ),
-            )
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildBotaoIniciando(),
+               _buildJaPossuiConta(),
+              ]),
           ],
         ),
       ),
