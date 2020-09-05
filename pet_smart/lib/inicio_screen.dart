@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './login_screen.dart';
+import './registro_screen.dart';
 
 class TelaInicial extends StatefulWidget {
 
@@ -20,8 +20,8 @@ class _TelaInicialState extends State<TelaInicial> {
       ],);
   }
 
-  Widget _buildBotaoIniciando() {
-    return FlatButton(child: Text('Iniciando', style: TextStyle(fontSize: 18),),
+  Widget _buildBtnRegistro() {
+    return FlatButton(child: Text('Registre-se', style: TextStyle(fontSize: 18),),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(80),
       ),
@@ -32,7 +32,7 @@ class _TelaInicialState extends State<TelaInicial> {
         //Navegar para tela login
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
+          MaterialPageRoute(builder: (context) => RegistroTela()),
         );// Navigator
       },
     );
@@ -96,7 +96,7 @@ class _TelaInicialState extends State<TelaInicial> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildBotaoIniciando(),
+                _buildBtnRegistro(),
                _buildJaPossuiConta(),
               ]),
           ],
