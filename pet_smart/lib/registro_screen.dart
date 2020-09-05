@@ -13,7 +13,8 @@ class _RegistroTelaState extends State<RegistroTela> {
   String _senha;
   String _confirmSenha;
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+  final Map<String, dynamic> formData = {'nome': null, 'email': null, 'senha': null, 'confirmSenha': null};
 
   _buildBtnVoltar(){
     return Container(
@@ -57,7 +58,7 @@ class _RegistroTelaState extends State<RegistroTela> {
         ),
         validator: (val){
           if(val.length == 0){
-            return "O campo nome não pode ser vazio";
+            return "O campo E-mail não pode ser vazio";
           }else{
             return null;
           }
@@ -66,6 +67,10 @@ class _RegistroTelaState extends State<RegistroTela> {
         style: new TextStyle(
             color: Colors.blueGrey
         ),
+
+        onSaved: (String value){
+          formData['email'] = value;
+        },
       ),
     );
   }
@@ -88,7 +93,6 @@ class _RegistroTelaState extends State<RegistroTela> {
           if(value.isEmpty){
            return 'Nome invalido';
           }
-          return null;
         },
         keyboardType: TextInputType.text,
         style: new TextStyle(
@@ -96,7 +100,7 @@ class _RegistroTelaState extends State<RegistroTela> {
         ),
 
         onSaved: (String value){
-          _nome = value;
+          formData['nome'] = value;
         },
       ),
     );
@@ -128,6 +132,10 @@ class _RegistroTelaState extends State<RegistroTela> {
         style: new TextStyle(
             color: Colors.blueGrey
         ),
+
+        onSaved: (String value){
+          formData['senha'] = value;
+        },
       ),
     );
   }
@@ -158,6 +166,10 @@ class _RegistroTelaState extends State<RegistroTela> {
         style: new TextStyle(
             color: Colors.blueGrey
         ),
+
+        onSaved: (String value){
+          formData['confirmSenha'] = value;
+        },
       ),
     );
   }
@@ -171,18 +183,23 @@ class _RegistroTelaState extends State<RegistroTela> {
       color: Theme.of(context).primaryColor,
       textColor: Colors.white,
       onPressed: (){
-        if(!_formKey.currentState.validate()){
-          return;
-        }
-        _formKey.currentState.save();
+        _submitForm();
 
-        print(_nome);
-        
         //Navegar para tela login
         // Navigator.push(
         // );// Navigator
       },
     );
+  }
+
+  void _submitForm(){
+    print('Submitting form');
+    if(_formKey.currentState.validate()){
+      _formKey.currentState.save();
+      print(formData);
+    }else{
+      print('error');
+    }
   }
 
   @override
