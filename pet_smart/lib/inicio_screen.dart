@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_smart/entrar_screen.dart';
 import './registro_screen.dart';
 
 class TelaInicial extends StatefulWidget {
@@ -15,7 +16,12 @@ class _TelaInicialState extends State<TelaInicial> {
       children: <Widget>[
         Text('Já possui uma conta?', style: TextStyle(fontSize: 18) ,),
         FlatButton(child: Text('Entrar', style: TextStyle(fontSize: 18),),
-          onPressed: (){} ,
+          onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => EntrarTela()),
+            );
+          } ,
         ),
       ],);
   }
