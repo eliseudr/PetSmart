@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_smart/home_screen.dart';
 import './inicio_screen.dart';
 
 class EntrarTela extends StatefulWidget {
@@ -21,6 +22,15 @@ class _EntrarTelaState extends State<EntrarTela> {
             MaterialPageRoute(builder: (context) => TelaInicial()),
           );// Navigator
         },
+      ),
+    );
+  }
+
+  _buildTitulo(){
+    return Container(
+      child: Text('PetSmart', style: TextStyle(fontSize: 26,
+          color: Colors.black54.withOpacity(0.5)
+      ),
       ),
     );
   }
@@ -101,10 +111,10 @@ class _EntrarTelaState extends State<EntrarTela> {
 
       onPressed: (){
         //_submitForm();
-
-        //Navegar para tela login
-        // Navigator.push(
-        // );// Navigator
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeTela()),
+        );
       },
     );
   }
@@ -126,7 +136,8 @@ class _EntrarTelaState extends State<EntrarTela> {
                  mainAxisAlignment: MainAxisAlignment.center,
                  crossAxisAlignment: CrossAxisAlignment.center,
                  children: <Widget>[
-
+                   _buildTitulo(),
+                   SizedBox(height: 20,),
                    _buildCampoNome(),
                    SizedBox(height: 10,),
                    _buildCampoSenha(),

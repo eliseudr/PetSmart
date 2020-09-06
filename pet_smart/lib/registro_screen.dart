@@ -8,10 +8,10 @@ class RegistroTela extends StatefulWidget {
 
 class _RegistroTelaState extends State<RegistroTela> {
 
-  String _nome;
-  String _email;
-  String _senha;
-  String _confirmSenha;
+  String nome;
+  String email;
+  String senha;
+  String confirmSenha;
 
   final _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> formData = {'nome': null, 'email': null, 'senha': null, 'confirmSenha': null};
