@@ -25,7 +25,7 @@ class _HomeTelaState extends State<HomeTela> {
       ),
     );
   }
-
+  //Text Serviços
   _buildServicos(){
     return Container(
         padding: EdgeInsets.only(top: 12, left: 12),
@@ -40,7 +40,6 @@ class _HomeTelaState extends State<HomeTela> {
 
     );
   }
-
   //LISTA DE SERVIÇOS (COSULTA, BANHO, TOSA.. ETC)
   _buildListServicos(){
     return Padding(
@@ -102,6 +101,44 @@ class _HomeTelaState extends State<HomeTela> {
       ),
     );
   }
+  //Text Meus animais
+  _buildMeusPets(){
+    return Container(
+      padding: EdgeInsets.only(top: 12, left: 12),
+      alignment: Alignment.topLeft,
+      child: Column(
+        children: <Widget>[
+          Text('Meus Animais',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+          ),
+        ],
+      ),
+
+    );
+  }
+  //Botao Inserir animais
+  _buildBtnInserirAnimais(){
+    return Container(
+      child: RaisedButton(
+        elevation: 10,
+        child: Column(
+          children: <Widget>[
+            Icon(Icons.add, size: 100,),
+          ],
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 30),
+        color: Colors.teal.shade100,
+        textColor: Colors.white,
+        onPressed: (){
+          //todo formInserirAnimal
+        },
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -119,12 +156,15 @@ class _HomeTelaState extends State<HomeTela> {
               _buildServicos(),
               SizedBox(height: 12,),
               _buildListServicos(),
+              SizedBox(height: 12,),
+              _buildMeusPets(),
+
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    // _buildServicos(),
+                    _buildBtnInserirAnimais(),
                     //todo campos meus pets
                   ],
                 ),

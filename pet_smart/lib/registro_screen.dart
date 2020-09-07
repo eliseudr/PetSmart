@@ -175,7 +175,8 @@ class _RegistroTelaState extends State<RegistroTela> {
   }
 
   _buildBtnFinalizar(){
-    return RaisedButton(child: Text('Finalizar', style: TextStyle(fontSize: 18),),
+    return RaisedButton(
+      child: Text('Finalizar', style: TextStyle(fontSize: 18),),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(80),
       ),
