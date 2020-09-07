@@ -50,6 +50,7 @@ flutter:
     - assets/Imagens/Banho.jpg
     - assets/Imagens/Consulta.jpg
     - assets/Imagens/Tosa.jpg
+#    - assets/Imagens/user.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

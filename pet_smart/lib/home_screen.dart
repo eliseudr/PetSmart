@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'entrar_screen.dart';
 
 class HomeTela extends StatefulWidget {
@@ -143,6 +145,20 @@ class _HomeTelaState extends State<HomeTela> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: new Drawer(
+        child: ListView(
+          children: <Widget>[
+            new UserAccountsDrawerHeader(
+              accountName: new Text('Eliseu'),
+              accountEmail: new Text('eliseudr@hotmail.com'),
+              currentAccountPicture: new CircleAvatar(
+                backgroundImage: NetworkImage('http://i.pravatar.cc/300'),
+
+              ),
+            )
+          ],
+        ),
+      ),
       body: Container(
         color: Colors.white,
         child: Form(
@@ -152,6 +168,7 @@ class _HomeTelaState extends State<HomeTela> {
               //botao voltar IOs
               SizedBox(height: 8,),
               _buildBtnVoltar(),
+              // _buildMenu(),
               SizedBox(height: 40,),
               _buildServicos(),
               SizedBox(height: 12,),
