@@ -41,6 +41,7 @@ class _HomeTelaState extends State<HomeTela> {
     );
   }
 
+  //LISTA DE SERVIÇOS (COSULTA, BANHO, TOSA.. ETC)
   _buildListServicos(){
     return Padding(
       padding: const EdgeInsets.only(left: 12),
@@ -55,7 +56,7 @@ class _HomeTelaState extends State<HomeTela> {
                 children: <Widget>[
                   ClipRRect(
                     borderRadius: BorderRadius.circular(40),
-                    child: Image.asset('assets/Imagens/Consulta.png', height: 130,),
+                    child: Image.asset('assets/Imagens/Consulta.jpg', height: 130,),
                   ),
                   SizedBox(height: 10,),
                   Padding(
@@ -71,7 +72,7 @@ class _HomeTelaState extends State<HomeTela> {
                 children: <Widget>[
                   ClipRRect(
                     borderRadius: BorderRadius.circular(40),
-                    child: Image.asset('assets/Imagens/Banho.png', height: 130,),
+                    child: Image.asset('assets/Imagens/Banho.jpg', height: 130,),
                   ),
                   SizedBox(height: 10,),
                   Padding(
@@ -87,12 +88,12 @@ class _HomeTelaState extends State<HomeTela> {
                 children: <Widget>[
                   ClipRRect(
                     borderRadius: BorderRadius.circular(40),
-                    child: Image.asset('assets/Imagens/Tosa.png', height: 130,),
+                    child: Image.asset('assets/Imagens/Tosa.jpg', height: 130,),
                   ),
                   SizedBox(height: 10,),
                   Padding(
                     padding: const EdgeInsets.only(left: 45),
-                    child: Text('Banho', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.black54),),
+                      child: Text('Tosa', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.black54),),
                   ),
                 ],
               ),
