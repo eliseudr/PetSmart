@@ -10,23 +10,6 @@ class HomeTela extends StatefulWidget {
 
 class _HomeTelaState extends State<HomeTela> {
 
-  //Todo esse botao nao vai existir quando a tela for finalizada, sim apenas um botao SAIR
-  _buildBtnVoltar(){
-    return Container(
-      width: 1000,
-      alignment: Alignment.topLeft,
-      child: IconButton(icon: Icon(Icons.arrow_back_ios),
-
-        onPressed: (){
-          //Navegar para tela login
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => EntrarTela()),
-          );// Navigator
-        },
-      ),
-    );
-  }
   //Text Serviços
   _buildServicos(){
     return Container(
@@ -145,6 +128,17 @@ class _HomeTelaState extends State<HomeTela> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: new AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.black87,
+        ),
+        title: Text('"User"', style: TextStyle(fontWeight: FontWeight.bold,
+            color: Colors.black87,
+            fontSize: 16)
+        ),
+        centerTitle: true,
+      ),
       drawer: new Drawer(
         child: ListView(
           children: <Widget>[
@@ -153,7 +147,6 @@ class _HomeTelaState extends State<HomeTela> {
               accountEmail: new Text('eliseudr@hotmail.com'),
               currentAccountPicture: new CircleAvatar(
                 backgroundImage: NetworkImage('http://i.pravatar.cc/300'),
-
               ),
             )
           ],
@@ -165,9 +158,6 @@ class _HomeTelaState extends State<HomeTela> {
           //todo if need formKey
           child: Column(
             children: <Widget>[
-              //botao voltar IOs
-              SizedBox(height: 8,),
-              _buildBtnVoltar(),
               // _buildMenu(),
               SizedBox(height: 40,),
               _buildServicos(),
