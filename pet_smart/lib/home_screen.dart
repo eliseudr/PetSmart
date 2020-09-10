@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'entrar_screen.dart';
 
@@ -143,10 +144,20 @@ class _HomeTelaState extends State<HomeTela> {
         child: ListView(
           children: <Widget>[
             new UserAccountsDrawerHeader(
-              accountName: new Text('Eliseu'),
-              accountEmail: new Text('eliseudr@hotmail.com'),
+              decoration: BoxDecoration(
+                color: Colors.tealAccent.shade200,
+
+              ),
+              accountName: new Text('Eliseu', style: TextStyle(fontWeight: FontWeight.bold,
+                  color: Colors.black87, fontSize: 16),
+              ),
+              accountEmail: new Text('eliseudr@hotmail.com',style: TextStyle(fontWeight: FontWeight.bold,
+                  color: Colors.black87, fontSize: 14),
+              ),
               currentAccountPicture: new CircleAvatar(
-                backgroundImage: NetworkImage('http://i.pravatar.cc/300'),
+                radius: 50,
+                backgroundImage: NetworkImage('https://scontent.fgyn12-1.fna.fbcdn.net/v/t1.0-9/36969101_1010476269132855_4712000855140728832_o.jpg?_nc_cat=106&_nc_sid=e3f864&_nc_eui2=AeFWUyVbnrOjZ09yHklz2dg2_Aci9BKGL3f8ByL0EoYvd5V2Z6e_GTD1xzCwCsU4FYalzKKCkwecTjZnx05q2e-u&_nc_ohc=bUWnD-b3DzgAX9f1NdR&_nc_ht=scontent.fgyn12-1.fna&oh=fe481a10474eed89504f9e66abec03e1&oe=5F7DEB1A'),
+                backgroundColor: Colors.transparent,
               ),
             )
           ],
