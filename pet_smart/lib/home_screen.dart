@@ -11,6 +11,8 @@ class HomeTela extends StatefulWidget {
 
 class _HomeTelaState extends State<HomeTela> {
 
+
+
   //Text Serviços
   _buildServicos(){
     return Container(
@@ -125,7 +127,6 @@ class _HomeTelaState extends State<HomeTela> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,8 +146,7 @@ class _HomeTelaState extends State<HomeTela> {
           children: <Widget>[
             new UserAccountsDrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.tealAccent.shade200,
-
+                color: Colors.white12,
               ),
               accountName: new Text('Eliseu', style: TextStyle(fontWeight: FontWeight.bold,
                   color: Colors.black87, fontSize: 16),
@@ -155,11 +155,16 @@ class _HomeTelaState extends State<HomeTela> {
                   color: Colors.black87, fontSize: 14),
               ),
               currentAccountPicture: new CircleAvatar(
-                radius: 50,
+
                 backgroundImage: NetworkImage('https://scontent.fgyn12-1.fna.fbcdn.net/v/t1.0-9/36969101_1010476269132855_4712000855140728832_o.jpg?_nc_cat=106&_nc_sid=e3f864&_nc_eui2=AeFWUyVbnrOjZ09yHklz2dg2_Aci9BKGL3f8ByL0EoYvd5V2Z6e_GTD1xzCwCsU4FYalzKKCkwecTjZnx05q2e-u&_nc_ohc=bUWnD-b3DzgAX9f1NdR&_nc_ht=scontent.fgyn12-1.fna&oh=fe481a10474eed89504f9e66abec03e1&oe=5F7DEB1A'),
                 backgroundColor: Colors.transparent,
               ),
-            )
+            ),
+            //LIST TILE MOSTRAS AS OPÇOES NO APPBAR
+            buildListTileCustomizado(Icons.person, 'Perfil', () => {} ),
+            buildListTileCustomizado(Icons.notifications, 'Notificações', () => {} ),
+            buildListTileCustomizado(Icons.settings, 'Configurações', () => {} ),
+            buildListTileCustomizado(Icons.lock, 'Sair', () => {} ),
           ],
         ),
       ),
@@ -188,6 +193,53 @@ class _HomeTelaState extends State<HomeTela> {
                 ),
               )
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//Customizar Botoes APPBAR
+class buildListTileCustomizado extends StatelessWidget {
+
+  IconData icon;
+  String text;
+  Function onTap;
+
+  buildListTileCustomizado(this.icon, this.text, this.onTap);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.grey.shade400)),
+        ),
+        child: InkWell(
+          //todo metodo onTap
+          onTap: onTap,
+
+          splashColor: Colors.teal,
+          child: Container(
+            height: 60,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Icon(icon),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(text),
+                      ),
+                    ]
+                ),
+                Icon(Icons.arrow_right),
+              ],
+            ),
           ),
         ),
       ),
