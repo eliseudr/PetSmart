@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pet_smart/home_screen.dart';
 import './inicio_screen.dart';
 
 class RegistroTela extends StatefulWidget {
@@ -12,9 +14,16 @@ class _RegistroTelaState extends State<RegistroTela> {
   String email;
   String senha;
   String confirmSenha;
+  bool _isSuccess;
 
-  final _formKey = GlobalKey<FormState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> formData = {'nome': null, 'email': null, 'senha': null, 'confirmSenha': null};
+  TextEditingController _displayEmail = TextEditingController();
+  TextEditingController _displayNome = TextEditingController();
+  TextEditingController _displaySenha = TextEditingController();
+  TextEditingController _displayConfirmSenha = TextEditingController();
+
 
   _buildBtnVoltar(){
     return Container(
@@ -46,6 +55,7 @@ class _RegistroTelaState extends State<RegistroTela> {
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: TextFormField(
+        controller: _displayEmail,
         decoration: new InputDecoration(
             labelText: "E-mail..",
             fillColor: Colors.white,
@@ -59,9 +69,7 @@ class _RegistroTelaState extends State<RegistroTela> {
         validator: (val){
           if(val.length == 0){
             return "O campo E-mail não pode ser vazio";
-          }else{
-            return null;
-          }
+          }return null;
         },
         keyboardType: TextInputType.text,
         style: new TextStyle(
@@ -79,6 +87,7 @@ class _RegistroTelaState extends State<RegistroTela> {
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: TextFormField(
+        controller: _displayNome,
         decoration: new InputDecoration(
           labelText: "Usúario..",
           fillColor: Colors.white,
@@ -91,8 +100,8 @@ class _RegistroTelaState extends State<RegistroTela> {
         ),
         validator: (String value){
           if(value.isEmpty){
-           return 'Nome invalido';
-          }
+           return "Nome invalido";
+          } return null;
         },
         keyboardType: TextInputType.text,
         style: new TextStyle(
@@ -110,6 +119,7 @@ class _RegistroTelaState extends State<RegistroTela> {
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: TextFormField(
+        controller: _displaySenha,
         obscureText: true,
         decoration: new InputDecoration(
             labelText: "Senha..",
@@ -124,9 +134,7 @@ class _RegistroTelaState extends State<RegistroTela> {
         validator: (val){
           if(val.length == 0){
             return "O campo senha não pode ser vazio";
-          }else{
-            return null;
-          }
+          }return null;
         },
         keyboardType: TextInputType.text,
         style: new TextStyle(
@@ -144,6 +152,7 @@ class _RegistroTelaState extends State<RegistroTela> {
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: TextFormField(
+        controller: _displayConfirmSenha,
         obscureText: true,
         decoration: new InputDecoration(
             labelText: "Confirme sua senha..",
@@ -155,12 +164,12 @@ class _RegistroTelaState extends State<RegistroTela> {
                 )
             )
         ),
-        validator: (val){
+        validator: (String val){
           if(val.length == 0){
             return "O campo senha não pode ser vazio";
-          }else{
-            return null;
-          }
+          }else if(confirmSenha != senha){
+            return "Senhas diferentes";
+          }return null;
         },
         keyboardType: TextInputType.text,
         style: new TextStyle(
@@ -183,24 +192,12 @@ class _RegistroTelaState extends State<RegistroTela> {
       padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
       color: Theme.of(context).primaryColor,
       textColor: Colors.white,
-      onPressed: (){
-        _submitForm();
-
-        //Navegar para tela login
-        // Navigator.push(
-        // );// Navigator
+      onPressed: () async {
+        if (_formKey.currentState.validate()) {
+          _registrarConta();
+        }
       },
     );
-  }
-
-  void _submitForm(){
-    print('Submitting form');
-    if(_formKey.currentState.validate()){
-      _formKey.currentState.save();
-      print(formData);
-    }else{
-      print('error');
-    }
   }
 
   @override
@@ -247,5 +244,24 @@ class _RegistroTelaState extends State<RegistroTela> {
         ),
       ),
     );
+  }
+
+  void _registrarConta() async{
+    final User user = (await _auth.createUserWithEmailAndPassword(email: _displayEmail.text, password: _displaySenha.text))
+        .user;
+
+    if(user != null){
+      if(!user.emailVerified){
+        await user.updateProfile(displayName: _displayNome.text);
+        final user1 = _auth.currentUser;
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => HomeTela(
+              user: user1,
+            )
+        ));
+      } else {
+        _isSuccess = false;
+      }
+    }
   }
 }

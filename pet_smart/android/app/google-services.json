@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "575875354781",
+    "firebase_url": "https://petsmart-app.firebaseio.com",
+    "project_id": "petsmart-app",
+    "storage_bucket": "petsmart-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:575875354781:android:75733be9f556de93bd0474",
+        "android_client_info": {
+          "package_name": "com.example.pet_smart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "575875354781-uscknvlnr9m94t5bgjer5b0rohfrpv4e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeYFmIpMlbkLYEWWUeQW-CavO57hdtEsw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "575875354781-uscknvlnr9m94t5bgjer5b0rohfrpv4e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

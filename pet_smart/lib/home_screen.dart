@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -5,6 +6,10 @@ import 'package:flutter/widgets.dart';
 import 'entrar_screen.dart';
 
 class HomeTela extends StatefulWidget {
+  final User user;
+
+  const HomeTela({Key key, this.user}) : super(key: key);
+
   @override
   _HomeTelaState createState() => _HomeTelaState();
 }
@@ -135,7 +140,7 @@ class _HomeTelaState extends State<HomeTela> {
         iconTheme: IconThemeData(
           color: Colors.black87,
         ),
-        title: Text('"User"', style: TextStyle(fontWeight: FontWeight.bold,
+        title: Text('${widget.user.displayName}', style: TextStyle(fontWeight: FontWeight.bold,
             color: Colors.black87,
             fontSize: 16)
         ),

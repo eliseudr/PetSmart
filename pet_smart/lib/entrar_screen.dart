@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_smart/home_screen.dart';
 import './inicio_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EntrarTela extends StatefulWidget {
   @override
@@ -8,6 +9,8 @@ class EntrarTela extends StatefulWidget {
 }
 
 class _EntrarTelaState extends State<EntrarTela> {
+
+  String _email, _senha;
 
   _buildBtnVoltar(){
     return Container(
@@ -35,12 +38,12 @@ class _EntrarTelaState extends State<EntrarTela> {
     );
   }
 
-  _buildCampoNome(){
+  _buildCampoEmail(){
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: TextFormField(
         decoration: new InputDecoration(
-            labelText: "Usúario",
+            labelText: "E-mail",
             fillColor: Colors.white,
             border: new OutlineInputBorder(
                 borderRadius: new BorderRadius.circular(15.0),
@@ -49,19 +52,18 @@ class _EntrarTelaState extends State<EntrarTela> {
                 )
             )
         ),
-        // validator: (String value){
-        //   if(value.isEmpty){
-        //     return 'Nome invalido';
-        //   }
-        // },
+        // ignore: missing_return
+        validator: (input){
+          if(input.isEmpty){
+            return 'Campo vazio';
+          }
+        },
+        onSaved: (input) => _email = input,
+
         keyboardType: TextInputType.text,
         style: new TextStyle(
             color: Colors.blueGrey
         ),
-
-        // onSaved: (String value){
-        //   formData['nome'] = value;
-        // },
       ),
     );
   }
@@ -81,23 +83,20 @@ class _EntrarTelaState extends State<EntrarTela> {
                 )
             )
         ),
-        // validator: (val){
-        //   if(val.length == 0){
-        //     return "O campo senha não pode ser vazio";
-        //   }else{
-        //     return null;
-        //   }
-        // },
+        // ignore: missing_return
+        validator: (input){
+          if(input.length < 5){
+            return 'A senha deve ter mais de 5 caracteres';
+          }
+        },
+        onSaved: (input) => _senha = input,
+
         keyboardType: TextInputType.text,
         style: new TextStyle(
             color: Colors.blueGrey
+          ),
         ),
-
-        // onSaved: (String value){
-        //   formData['senha'] = value;
-        // },
-      ),
-    );
+      );
   }
 
   _buildBtnEntrar(){
@@ -110,19 +109,18 @@ class _EntrarTelaState extends State<EntrarTela> {
       textColor: Colors.white,
 
       onPressed: (){
-        //_submitForm();
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomeTela()),
-        );
+        entrar(_email,_senha);
       },
     );
   }
+
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        key: _formkey,
         color: Colors.white,
         child: Form(
           //todo if need formKey
@@ -138,7 +136,7 @@ class _EntrarTelaState extends State<EntrarTela> {
                  children: <Widget>[
                    _buildTitulo(),
                    SizedBox(height: 20,),
-                   _buildCampoNome(),
+                   _buildCampoEmail(),
                    SizedBox(height: 10,),
                    _buildCampoSenha(),
                    SizedBox(height: 20,),
@@ -153,4 +151,21 @@ class _EntrarTelaState extends State<EntrarTela> {
       ),
     );
   }
+
+  Future <void> entrar(String _emaili, String _senha) async {
+    // final formState = _formkey.currentState;
+    // if(formState.validate()){
+    //   formState.save();
+      try{
+        await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _senha);
+        print("Sucesso");
+        //Abri janela Home
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomeTela())
+        );
+      }catch(e){
+        print(e.message);
+      }
+   }
 }
