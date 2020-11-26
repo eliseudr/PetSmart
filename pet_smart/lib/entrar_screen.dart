@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_smart/home_screen.dart';
-import './inicio_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import './inicio_screen.dart';
 
 class EntrarTela extends StatefulWidget {
   @override
@@ -9,8 +9,11 @@ class EntrarTela extends StatefulWidget {
 }
 
 class _EntrarTelaState extends State<EntrarTela> {
-
-  String _email, _senha;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _senhaController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   _buildBtnVoltar(){
     return Container(
@@ -42,6 +45,7 @@ class _EntrarTelaState extends State<EntrarTela> {
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: TextFormField(
+        controller: _emailController,
         decoration: new InputDecoration(
             labelText: "E-mail",
             fillColor: Colors.white,
@@ -52,15 +56,11 @@ class _EntrarTelaState extends State<EntrarTela> {
                 )
             )
         ),
-        // ignore: missing_return
         validator: (input){
           if(input.isEmpty){
-            return 'Campo vazio';
-          }
+            return 'E-mail incorreto';
+          } return null;
         },
-        onSaved: (input) => _email = input,
-
-        keyboardType: TextInputType.text,
         style: new TextStyle(
             color: Colors.blueGrey
         ),
@@ -72,6 +72,7 @@ class _EntrarTelaState extends State<EntrarTela> {
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: TextFormField(
+        controller: _senhaController,
         obscureText: true,
         decoration: new InputDecoration(
             labelText: "Senha",
@@ -83,15 +84,11 @@ class _EntrarTelaState extends State<EntrarTela> {
                 )
             )
         ),
-        // ignore: missing_return
         validator: (input){
-          if(input.length < 5){
-            return 'A senha deve ter mais de 5 caracteres';
-          }
+          if(input.isEmpty){
+            return 'Senha incorreta';
+          } return null;
         },
-        onSaved: (input) => _senha = input,
-
-        keyboardType: TextInputType.text,
         style: new TextStyle(
             color: Colors.blueGrey
           ),
@@ -107,65 +104,86 @@ class _EntrarTelaState extends State<EntrarTela> {
       padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
       color: Theme.of(context).primaryColor,
       textColor: Colors.white,
-
-      onPressed: (){
-        entrar(_email,_senha);
+      onPressed: () async {
+        if(_formKey.currentState.validate()){
+          _entraComEmailSenha();
+        }
       },
     );
   }
 
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return Scaffold(
-      body: Container(
-        key: _formkey,
-        color: Colors.white,
-        child: Form(
-          //todo if need formKey
-          child: Column(
-            children: <Widget>[
-              //botao voltar IOs
-              SizedBox(height: 8,),
-              _buildBtnVoltar(),
-              Expanded(
-               child: Column(
-                 mainAxisAlignment: MainAxisAlignment.center,
-                 crossAxisAlignment: CrossAxisAlignment.center,
-                 children: <Widget>[
-                   _buildTitulo(),
-                   SizedBox(height: 20,),
-                   _buildCampoEmail(),
-                   SizedBox(height: 10,),
-                   _buildCampoSenha(),
-                   SizedBox(height: 20,),
-                   _buildBtnEntrar(),
-                   //todo campos
-                 ],
-               ),
-              )
-            ],
+      key: _scaffoldKey,
+      body: Builder(builder: (BuildContext context){
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            comEmailSenha(),
+          ],
+        );
+      }),
+    );
+  }
+
+  Widget comEmailSenha() {
+    return Form(
+      key: _formKey,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          //color: Colors.white,
+          child: SizedBox(
+            height: 400,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                //botao voltar IOs
+                SizedBox(height: 8,),
+                _buildBtnVoltar(),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      _buildTitulo(),
+                      SizedBox(height: 20,),
+                      _buildCampoEmail(),
+                      SizedBox(height: 10,),
+                      _buildCampoSenha(),
+                      SizedBox(height: 20,),
+                      _buildBtnEntrar(),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
+        )
       ),
     );
   }
 
-  Future <void> entrar(String _emaili, String _senha) async {
-    // final formState = _formkey.currentState;
-    // if(formState.validate()){
-    //   formState.save();
-      try{
-        await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _senha);
-        print("Sucesso");
-        //Abri janela Home
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomeTela())
-        );
-      }catch(e){
-        print(e.message);
-      }
-   }
+  void _entraComEmailSenha() async {
+    try{
+      final User user = (await _auth.signInWithEmailAndPassword(
+          email: _emailController.text, password: _senhaController.text)).user;
+          if(!user.emailVerified){
+            await user.sendEmailVerification();
+          }
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_){
+            return HomeTela(user: user,
+            );
+          }));
+    }catch (e){
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text("Falha ao entrar com E-mail e Senha"),
+      ));
+    }
+  }
+
+  void _signOut() async {
+    await _auth.signOut();
+  }
 }

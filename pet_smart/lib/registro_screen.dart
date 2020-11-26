@@ -254,11 +254,12 @@ class _RegistroTelaState extends State<RegistroTela> {
       if(!user.emailVerified){
         await user.updateProfile(displayName: _displayNome.text);
         final user1 = _auth.currentUser;
+        // Navigator.of(context).pushReplacement(MaterialPageRoute(
+        //     builder: (context) => HomeTela(
+        //       user: user1,
+        //     )
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => HomeTela(
-              user: user1,
-            )
-        ));
+            builder: (context) => TelaInicial()));
       } else {
         _isSuccess = false;
       }

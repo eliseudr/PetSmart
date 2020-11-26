@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pet_smart/inicio_screen.dart';
 import 'entrar_screen.dart';
 
 class HomeTela extends StatefulWidget {
@@ -15,8 +17,8 @@ class HomeTela extends StatefulWidget {
 }
 
 class _HomeTelaState extends State<HomeTela> {
-
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //Text Serviços
   _buildServicos(){
@@ -135,6 +137,7 @@ class _HomeTelaState extends State<HomeTela> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: new AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(
@@ -153,15 +156,14 @@ class _HomeTelaState extends State<HomeTela> {
               decoration: BoxDecoration(
                 color: Colors.white12,
               ),
-              accountName: new Text('Eliseu', style: TextStyle(fontWeight: FontWeight.bold,
+              accountName: new Text('${widget.user.displayName}', style: TextStyle(fontWeight: FontWeight.bold,
                   color: Colors.black87, fontSize: 16),
               ),
-              accountEmail: new Text('eliseudr@hotmail.com',style: TextStyle(fontWeight: FontWeight.bold,
+              accountEmail: new Text('${widget.user.email}',style: TextStyle(fontWeight: FontWeight.bold,
                   color: Colors.black87, fontSize: 14),
               ),
               currentAccountPicture: new CircleAvatar(
-
-                backgroundImage: NetworkImage('https://scontent.fgyn12-1.fna.fbcdn.net/v/t1.0-9/36969101_1010476269132855_4712000855140728832_o.jpg?_nc_cat=106&_nc_sid=e3f864&_nc_eui2=AeFWUyVbnrOjZ09yHklz2dg2_Aci9BKGL3f8ByL0EoYvd5V2Z6e_GTD1xzCwCsU4FYalzKKCkwecTjZnx05q2e-u&_nc_ohc=bUWnD-b3DzgAX9f1NdR&_nc_ht=scontent.fgyn12-1.fna&oh=fe481a10474eed89504f9e66abec03e1&oe=5F7DEB1A'),
+                backgroundImage: NetworkImage('https://source.unsplash.com/random'),
                 backgroundColor: Colors.transparent,
               ),
             ),
@@ -169,7 +171,12 @@ class _HomeTelaState extends State<HomeTela> {
             buildListTileCustomizado(Icons.person, 'Perfil', () => {} ),
             buildListTileCustomizado(Icons.notifications, 'Notificações', () => {} ),
             buildListTileCustomizado(Icons.settings, 'Configurações', () => {} ),
-            buildListTileCustomizado(Icons.lock, 'Sair', () => {} ),
+            buildListTileCustomizado(Icons.lock, 'Sair', () => {
+               _signOut().whenComplete((){
+                 Navigator.of(context).pushReplacement(MaterialPageRoute(
+                   builder: (context) => TelaInicial()));
+               })
+            } ),
           ],
         ),
       ),
@@ -202,6 +209,10 @@ class _HomeTelaState extends State<HomeTela> {
         ),
       ),
     );
+  }
+
+  Future _signOut() async {
+    await _auth.signOut();
   }
 }
 
