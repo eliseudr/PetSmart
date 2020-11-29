@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import './inicio_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future <void> main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());

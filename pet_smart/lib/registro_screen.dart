@@ -9,9 +9,7 @@ class RegistroTela extends StatefulWidget {
 }
 
 class _RegistroTelaState extends State<RegistroTela> {
-
-  String nome;
-  String email;
+  
   String senha;
   String confirmSenha;
   bool _isSuccess;
