@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pet_smart/inicio_screen.dart';
+import 'package:pet_smart/app/pages/landing_page/landing_page.dart';
 
 class HomeTela extends StatefulWidget {
   final User user;
@@ -184,7 +184,7 @@ class _HomeTelaState extends State<HomeTela> {
       onPressed: () {
         _signOut().whenComplete(() {
           Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => TelaInicial()));
+              MaterialPageRoute(builder: (context) => LandingPage()));
         });
       },
     );
