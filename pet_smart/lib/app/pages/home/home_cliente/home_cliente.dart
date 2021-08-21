@@ -3,18 +3,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pet_smart/app/data/models/usuario_logado_model.dart';
 import 'package:pet_smart/app/pages/landing_page/landing_page.dart';
 
-class HomeTela extends StatefulWidget {
+class HomeCliente extends StatefulWidget {
   final User user;
 
-  const HomeTela({Key key, this.user}) : super(key: key);
+  final UsuarioLogadoModel userLogado;
+
+  const HomeCliente({Key key, this.user, this.userLogado}) : super(key: key);
 
   @override
-  _HomeTelaState createState() => _HomeTelaState();
+  _HomeClienteState createState() => _HomeClienteState();
 }
 
-class _HomeTelaState extends State<HomeTela> {
+class _HomeClienteState extends State<HomeCliente> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 

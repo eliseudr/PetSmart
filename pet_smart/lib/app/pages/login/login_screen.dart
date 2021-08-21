@@ -7,7 +7,10 @@ import 'package:pet_smart/app/data/repositories/pessoa_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:pet_smart/app/helpers/shared_prefs.dart';
 import 'package:pet_smart/app/helpers/utils.dart';
+import 'package:pet_smart/app/pages/home/home_cliente/home_cliente.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   final PessoaRepository _pessoaRepository = PessoaRepository(
@@ -52,6 +55,25 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  _saveUserPrefs(int id, String cpf) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.setInt(Constants.id, id);
+
+    prefs.setString(Constants.cpf, cpf);
+
+    SharedPrefs sharedPrefs = SharedPrefs();
+
+    final usuarioLogado = await sharedPrefs.saveUsuarioLogado();
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => HomeCliente(userLogado: usuarioLogado),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,20 +83,22 @@ class _LoginScreenState extends State<LoginScreen> {
         bloc: _loginBloc,
         listener: (context, state) {
           if (state is LoginLoaded) {
-            // _saveUserPrefs(state.pessoa.id, state.pessoa.cpf);
-            // } else if (state is PessoaLoaded) {
-            //   if (state.pessoa != null) {
-            //     Navigator.pushAndRemoveUntil(
-            //       context,
-            //       MaterialPageRoute<bool>(
-            //           builder: (context) => HomePessoa(
-            //                 usuarioLogado: state.pessoa,
-            //               )),
-            //       (Route<dynamic> route) => false,
-            //     );
-            //   }
-            // } else if (state is LoginError) {
-            //   _handleErrorResponse(state.e);
+            print(state.pessoa.id);
+            print(state.pessoa.cpf);
+            _saveUserPrefs(state.pessoa.id, state.pessoa.cpf);
+          } else if (state is PessoaLoaded) {
+            if (state.pessoa != null) {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute<bool>(
+                    builder: (context) => HomeCliente(
+                          userLogado: state.pessoa,
+                        )),
+                (Route<dynamic> route) => false,
+              );
+            }
+          } else if (state is LoginError) {
+            print(state.e);
           }
         },
         child: BlocBuilder<LoginBloc, LoginState>(

@@ -23,8 +23,7 @@ class PessoaProvider {
   Future<PessoaModel> login(String cpf, String senha) async {
     final Map<String, dynamic> dados = {'cpf': cpf, 'senha': senha};
 
-    final url = '${Constants.baseUrl}/login?nomedb=petsmart';
-    print(dados);
+    final url = '${Constants.baseUrl}/login${Constants.nomedb}';
 
     final response = await this.httpClient.post(url,
         headers: {HttpHeaders.contentTypeHeader: Constants.applicationJson},
