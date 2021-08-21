@@ -1,58 +1,142 @@
 import 'package:flutter/material.dart';
-import 'package:pet_smart/app/pages/home/home_cliente/home_cliente.dart';
-import 'package:pet_smart/app/pages/landing_page/landing_page.dart';
+import 'package:pet_smart/app/data/bloc/login/login_bloc.dart';
+import 'package:pet_smart/app/data/bloc/login/login_event.dart';
+import 'package:pet_smart/app/data/bloc/login/login_state.dart';
+import 'package:pet_smart/app/data/providers/pessoa_provider.dart';
+import 'package:pet_smart/app/data/repositories/pessoa_repository.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:pet_smart/app/helpers/utils.dart';
 
 class LoginScreen extends StatefulWidget {
+  final PessoaRepository _pessoaRepository = PessoaRepository(
+    pessoaApiClient: PessoaProvider(
+      httpClient: http.Client(),
+    ),
+  );
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _senhaController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  LoginBloc _loginBloc;
+  // final _cpfController = MaskedTextController(mask: Constants.cpfMask);
+  final _cpfController = TextEditingController();
+  final _senhaController = TextEditingController();
 
-  _buildBtnVoltar() {
-    return Container(
-      width: 1000,
-      alignment: Alignment.topLeft,
-      child: IconButton(
-        icon: Icon(Icons.arrow_back_ios),
-        onPressed: () {
-          //Navegar para tela login
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => LandingPage()),
-          ); // Navigator
+  @override
+  void initState() {
+    _loginBloc = LoginBloc(
+      pessoaRepository: widget._pessoaRepository,
+    );
+
+    super.initState();
+  }
+
+  _submitForm() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+    }
+    // Salvar usuario no SharedPreferences
+    print(_cpfController.text);
+    print(_senhaController.text);
+    _loginBloc.add(
+      Login(
+        cpf: _cpfController.text,
+        senha: _senhaController.text,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: Colors.white,
+      body: BlocListener<LoginBloc, LoginState>(
+        bloc: _loginBloc,
+        listener: (context, state) {
+          if (state is LoginLoaded) {
+            // _saveUserPrefs(state.pessoa.id, state.pessoa.cpf);
+            // } else if (state is PessoaLoaded) {
+            //   if (state.pessoa != null) {
+            //     Navigator.pushAndRemoveUntil(
+            //       context,
+            //       MaterialPageRoute<bool>(
+            //           builder: (context) => HomePessoa(
+            //                 usuarioLogado: state.pessoa,
+            //               )),
+            //       (Route<dynamic> route) => false,
+            //     );
+            //   }
+            // } else if (state is LoginError) {
+            //   _handleErrorResponse(state.e);
+          }
         },
+        child: BlocBuilder<LoginBloc, LoginState>(
+          bloc: _loginBloc,
+          builder: (context, state) {
+            if (state is InitialLoginState) {
+              return _buildListView();
+              // } else if (state is LoginLoading) {
+              //   return ProgressBar();
+              // } else if (state is PessoaLoaded) {
+              //   return _buildListView();
+            } else {
+              return _buildListView();
+            }
+          },
+        ),
       ),
     );
   }
 
-  _buildTitulo() {
-    return Container(
-      child: Text(
-        'PetSmart',
-        style: TextStyle(fontSize: 26, color: Colors.black54.withOpacity(0.5)),
+  Widget _buildListView() {
+    return ListView(
+      children: <Widget>[
+        // Padding(
+        //   padding: EdgeInsets.fromLTRB(32, 16, 16, 32),
+        //   child: _buildTabBar(),
+        // ),
+        Padding(
+            padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+            child: _buildTabEntrar()),
+      ],
+    );
+  }
+
+  Widget _buildTabEntrar() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          _buildCampoCpf(),
+          _buildCampoSenha(),
+          // _buildEsqueciSenhaButton(),
+          _buildLoginButton(),
+        ],
       ),
     );
   }
 
-  _buildCampoEmail() {
+  _buildCampoCpf() {
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: TextFormField(
-        controller: _emailController,
+        controller: _cpfController,
         decoration: new InputDecoration(
-            labelText: "E-mail",
+            labelText: "Cpf",
             fillColor: Colors.white,
             border: new OutlineInputBorder(
                 borderRadius: new BorderRadius.circular(15.0),
                 borderSide: new BorderSide(color: Colors.blueGrey))),
         validator: (input) {
           if (input.isEmpty) {
-            return 'E-mail incorreto';
+            return 'Cpf incorreto';
           }
           return null;
         },
@@ -84,10 +168,10 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  _buildBtnEntrar() {
+  _buildLoginButton() {
     return RaisedButton(
       child: Text(
-        'Entrar',
+        'Login',
         style: TextStyle(fontSize: 18),
       ),
       shape: RoundedRectangleBorder(
@@ -96,75 +180,9 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
       color: Theme.of(context).primaryColor,
       textColor: Colors.white,
-      onPressed: () async {
-        if (_formKey.currentState.validate()) {
-          _entraComEmailSenha();
-        }
+      onPressed: () {
+        _submitForm();
       },
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      body: Builder(builder: (BuildContext context) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            comEmailSenha(),
-          ],
-        );
-      }),
-    );
-  }
-
-  Widget comEmailSenha() {
-    return Form(
-      key: _formKey,
-      child: Card(
-          child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        //color: Colors.white,
-        child: SizedBox(
-          height: 400,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              //botao voltar IOs
-              SizedBox(
-                height: 8,
-              ),
-              _buildBtnVoltar(),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    _buildTitulo(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    _buildCampoEmail(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    _buildCampoSenha(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    _buildBtnEntrar(),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      )),
-    );
-  }
-
-  void _entraComEmailSenha() async {}
-
-  void _signOut() async {}
 }

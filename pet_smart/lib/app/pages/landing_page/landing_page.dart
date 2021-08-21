@@ -16,7 +16,7 @@ class _LandingPageState extends State<LandingPage> {
           'Já possui uma conta?',
           style: TextStyle(fontSize: 18),
         ),
-        FlatButton(
+        TextButton(
           child: Text(
             'Entrar',
             style: TextStyle(fontSize: 18),
