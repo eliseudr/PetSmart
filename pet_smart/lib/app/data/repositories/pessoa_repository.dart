@@ -15,6 +15,6 @@ class PessoaRepository {
 
   // Verifica se a conta do usuario é Cliente ou Fornecedor
   Future<UsuarioLogadoModel> getUserConfig(int idPessoa, String token) async {
-    return await pessoaApiClient.fetchUserConfig(idPessoa, token);
+    return await pessoaApiClient.fetchUser(idPessoa, token);
   }
 }

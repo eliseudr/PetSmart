@@ -57,9 +57,8 @@ class PessoaProvider {
   /// 3. Conta Financeiro: Tem permissão da Conta Pessoa + acesso ao sistema
   /// O endpoint /usuarios/:id retornara as respectivas informaçoes do usuario
   ///  dentre elas os campos BOOL cliente e fonrecedor.
-  Future<UsuarioLogadoModel> fetchUserConfig(int idPessoa, String token) async {
-    final url =
-        '${Constants.baseUrl}/usuarios?id_pessoa=$idPessoa${Constants.nomedb}';
+  Future<UsuarioLogadoModel> fetchUser(int id, String token) async {
+    final url = '${Constants.baseUrl}/usuarios/$id${Constants.nomedb}';
 
     final response = await this.newHttpClient.get(
       url,

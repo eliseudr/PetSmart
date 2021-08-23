@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -7,11 +6,9 @@ import 'package:pet_smart/app/data/models/usuario_logado_model.dart';
 import 'package:pet_smart/app/pages/landing_page/landing_page.dart';
 
 class HomeCliente extends StatefulWidget {
-  final User user;
+  final UsuarioLogadoModel usuarioLogado;
 
-  final UsuarioLogadoModel userLogado;
-
-  const HomeCliente({Key key, this.user, this.userLogado}) : super(key: key);
+  const HomeCliente({Key key, this.usuarioLogado}) : super(key: key);
 
   @override
   _HomeClienteState createState() => _HomeClienteState();
@@ -19,7 +16,6 @@ class HomeCliente extends StatefulWidget {
 
 class _HomeClienteState extends State<HomeCliente> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //Text Serviços
   _buildServicos() {
@@ -216,7 +212,7 @@ class _HomeClienteState extends State<HomeCliente> {
         iconTheme: IconThemeData(
           color: Colors.black87,
         ),
-        title: Text('${widget.user.displayName}',
+        title: Text('USUARIO LOGADO}',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
@@ -231,14 +227,14 @@ class _HomeClienteState extends State<HomeCliente> {
                 color: Colors.white12,
               ),
               accountName: new Text(
-                '${widget.user.displayName}',
+                'NOME DA CONTA',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                     fontSize: 16),
               ),
               accountEmail: new Text(
-                '${widget.user.email}',
+                'E-MAIL',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
@@ -303,7 +299,7 @@ class _HomeClienteState extends State<HomeCliente> {
   }
 
   Future _signOut() async {
-    await _auth.signOut();
+    // await _auth.signOut();
   }
 }
 

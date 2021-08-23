@@ -33,7 +33,7 @@ class SharedPrefs {
     // Verifica se é conta Cliente ou conta Fornecedor
     try {
       usuarioLogado = await _pessoaRepository.getUserConfig(
-        prefsPessoa[Constants.idPessoa],
+        prefsPessoa[Constants.id],
         prefsPessoa[Constants.token],
       );
     } catch (_) {}

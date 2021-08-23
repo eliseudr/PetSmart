@@ -69,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) => HomeCliente(userLogado: usuarioLogado),
+        builder: (_) => HomeCliente(usuarioLogado: usuarioLogado),
       ),
     );
   }
@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 context,
                 MaterialPageRoute<bool>(
                     builder: (context) => HomeCliente(
-                          userLogado: state.pessoa,
+                          usuarioLogado: state.pessoa,
                         )),
                 (Route<dynamic> route) => false,
               );

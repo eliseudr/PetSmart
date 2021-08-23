@@ -10,7 +10,6 @@ class Constants {
 
   // Formulários Model
   static const String id = 'id';
-  static const String idPessoa = 'id_pessoa';
   static const String nome = 'nome';
   static const String cpf = 'cpf';
   static const String email = 'email';
