@@ -45,9 +45,12 @@ class PessoaProvider {
     prefs.setString(Constants.token, responseData[Constants.token]);
 
     return PessoaModel(
-        id: responseData[Constants.pessoa][Constants.id],
-        nome: '',
-        cpf: responseData[Constants.pessoa][Constants.cpf]);
+      id: responseData[Constants.pessoa][Constants.id],
+      nome: responseData[Constants.pessoa][Constants.nome],
+      cpf: responseData[Constants.pessoa][Constants.cpf],
+      cliente: responseData[Constants.pessoa][Constants.contaCliente],
+      fornecedor: responseData[Constants.pessoa][Constants.contaFornecedor],
+    );
   }
 
   /// No aplicativo há dois tipos de usuários

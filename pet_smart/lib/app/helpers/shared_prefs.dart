@@ -56,7 +56,7 @@ class SharedPrefs {
       }
     }
 
-    print('PrefsPessoa: $prefsPessoa');
+    // print('PrefsPessoa: $prefsPessoa');
 
     prefsPessoa[Constants.prefs].setString(
       Constants.usuarioLogado,
@@ -67,7 +67,7 @@ class SharedPrefs {
       prefsPessoa[Constants.prefs].getString(Constants.usuarioLogado),
     ));
 
-    print('UsuarioLogado: $usuarioLogado');
+    // print('UsuarioLogado: $usuarioLogado');
 
     return usuarioLogado;
   }

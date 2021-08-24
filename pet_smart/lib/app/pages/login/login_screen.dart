@@ -45,8 +45,8 @@ class _LoginScreenState extends State<LoginScreen> {
       _formKey.currentState.save();
     }
     // Salvar usuario no SharedPreferences
-    print(_cpfController.text);
-    print(_senhaController.text);
+    // print(_cpfController.text);
+    // print(_senhaController.text);
     _loginBloc.add(
       Login(
         cpf: _cpfController.text,
@@ -55,23 +55,32 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  _saveUserPrefs(int id, String cpf) async {
+  _saveUserPrefs(int id, String cpf, bool cliente, bool fornecedor) async {
     final prefs = await SharedPreferences.getInstance();
 
     prefs.setInt(Constants.id, id);
-
     prefs.setString(Constants.cpf, cpf);
+    // Verifica se a conta é cliente ou fornecedor
+    if (cliente == true) {
+      prefs.setBool(Constants.contaCliente, cliente);
+    } else {
+      prefs.setBool(Constants.contaFornecedor, fornecedor);
+    }
 
     SharedPrefs sharedPrefs = SharedPrefs();
 
     final usuarioLogado = await sharedPrefs.saveUsuarioLogado();
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => HomeCliente(usuarioLogado: usuarioLogado),
-      ),
-    );
+    if (cliente == true) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => HomeCliente(usuarioLogado: usuarioLogado),
+        ),
+      );
+    } else {
+      print('CONTA FORNECEDOR: ${fornecedor.toString()}');
+    }
   }
 
   @override
@@ -83,9 +92,12 @@ class _LoginScreenState extends State<LoginScreen> {
         bloc: _loginBloc,
         listener: (context, state) {
           if (state is LoginLoaded) {
-            print(state.pessoa.id);
-            print(state.pessoa.cpf);
-            _saveUserPrefs(state.pessoa.id, state.pessoa.cpf);
+            // print(state.pessoa.id);
+            // print(state.pessoa.cpf);
+            print('CLIENTE: ${state.pessoa.cliente}');
+            print('FORNECEDOR: ${state.pessoa.fornecedor}');
+            _saveUserPrefs(state.pessoa.id, state.pessoa.cpf,
+                state.pessoa.cliente, state.pessoa.fornecedor);
           } else if (state is PessoaLoaded) {
             if (state.pessoa != null) {
               Navigator.pushAndRemoveUntil(

@@ -42,7 +42,7 @@ class PessoaModel {
         ativo: json[Constants.ativo],
         criadoEm: json[Constants.criadoEm],
         admin: json[Constants.admin],
-        cliente: json[Constants.cliente],
-        fornecedor: json[Constants.fornecedor]);
+        cliente: json[Constants.contaCliente],
+        fornecedor: json[Constants.contaFornecedor]);
   }
 }

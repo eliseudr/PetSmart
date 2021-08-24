@@ -30,6 +30,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             await pessoaRepository.login(event.cpf, event.senha);
         yield LoginLoaded(pessoa: pessoa);
       } catch (e) {
+        print(e);
         yield LoginError(e: e);
       }
     } else if (event is GetPessoa) {
