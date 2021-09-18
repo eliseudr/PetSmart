@@ -5,16 +5,16 @@ import 'package:flutter/widgets.dart';
 import 'package:pet_smart/app/data/models/usuario_logado_model.dart';
 import 'package:pet_smart/app/pages/landing_page/landing_page.dart';
 
-class HomeCliente extends StatefulWidget {
+class HomeFornecedor extends StatefulWidget {
   final UsuarioLogadoModel usuarioLogado;
 
-  const HomeCliente({Key key, this.usuarioLogado}) : super(key: key);
+  const HomeFornecedor({Key key, this.usuarioLogado}) : super(key: key);
 
   @override
-  _HomeClienteState createState() => _HomeClienteState();
+  _HomeFornecedorState createState() => _HomeFornecedorState();
 }
 
-class _HomeClienteState extends State<HomeCliente> {
+class _HomeFornecedorState extends State<HomeFornecedor> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   //Text Serviços
@@ -25,7 +25,7 @@ class _HomeClienteState extends State<HomeCliente> {
       child: Column(
         children: <Widget>[
           Text(
-            'Solicitação de Serviços',
+            'Meus serviços',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
           ),
         ],
@@ -136,7 +136,7 @@ class _HomeClienteState extends State<HomeCliente> {
       child: Column(
         children: <Widget>[
           Text(
-            'Meus Animais',
+            'Adicionar Serviços',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
           ),
         ],
@@ -212,7 +212,7 @@ class _HomeClienteState extends State<HomeCliente> {
         iconTheme: IconThemeData(
           color: Colors.black87,
         ),
-        title: Text('USUARIO LOGADO - CLIENTE',
+        title: Text('USUARIO LOGADO - FORNECEDOR',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,

@@ -10,6 +10,7 @@ import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:pet_smart/app/helpers/shared_prefs.dart';
 import 'package:pet_smart/app/helpers/utils.dart';
 import 'package:pet_smart/app/pages/home/home_cliente/home_cliente.dart';
+import 'package:pet_smart/app/pages/home/home_fornecedor/home_fornecedor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -78,8 +79,15 @@ class _LoginScreenState extends State<LoginScreen> {
           builder: (_) => HomeCliente(usuarioLogado: usuarioLogado),
         ),
       );
-    } else {
+    }
+    if (fornecedor == true) {
       print('CONTA FORNECEDOR: ${fornecedor.toString()}');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => HomeFornecedor(usuarioLogado: usuarioLogado),
+        ),
+      );
     }
   }
 
