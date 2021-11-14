@@ -6,7 +6,6 @@ import 'package:pet_smart/app/data/providers/pessoa_provider.dart';
 import 'package:pet_smart/app/data/repositories/pessoa_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:pet_smart/app/helpers/shared_prefs.dart';
 import 'package:pet_smart/app/helpers/utils.dart';
 import 'package:pet_smart/app/pages/home/home_cliente/home_cliente.dart';
@@ -96,44 +95,46 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
-      body: BlocListener<LoginBloc, LoginState>(
-        bloc: _loginBloc,
-        listener: (context, state) {
-          if (state is LoginLoaded) {
-            // print(state.pessoa.id);
-            // print(state.pessoa.cpf);
-            print('CLIENTE: ${state.pessoa.cliente}');
-            print('FORNECEDOR: ${state.pessoa.fornecedor}');
-            _saveUserPrefs(state.pessoa.id, state.pessoa.cpf,
-                state.pessoa.cliente, state.pessoa.fornecedor);
-          } else if (state is PessoaLoaded) {
-            if (state.pessoa != null) {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute<bool>(
-                    builder: (context) => HomeCliente(
-                          usuarioLogado: state.pessoa,
-                        )),
-                (Route<dynamic> route) => false,
-              );
-            }
-          } else if (state is LoginError) {
-            print(state.e);
-          }
-        },
-        child: BlocBuilder<LoginBloc, LoginState>(
+      body: Center(
+        child: BlocListener<LoginBloc, LoginState>(
           bloc: _loginBloc,
-          builder: (context, state) {
-            if (state is InitialLoginState) {
-              return _buildListView();
-              // } else if (state is LoginLoading) {
-              //   return ProgressBar();
-              // } else if (state is PessoaLoaded) {
-              //   return _buildListView();
-            } else {
-              return _buildListView();
+          listener: (context, state) {
+            if (state is LoginLoaded) {
+              // print(state.pessoa.id);
+              // print(state.pessoa.cpf);
+              print('CLIENTE: ${state.pessoa.cliente}');
+              print('FORNECEDOR: ${state.pessoa.fornecedor}');
+              _saveUserPrefs(state.pessoa.id, state.pessoa.cpf,
+                  state.pessoa.cliente, state.pessoa.fornecedor);
+            } else if (state is PessoaLoaded) {
+              if (state.pessoa != null) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute<bool>(
+                      builder: (context) => HomeCliente(
+                            usuarioLogado: state.pessoa,
+                          )),
+                  (Route<dynamic> route) => false,
+                );
+              }
+            } else if (state is LoginError) {
+              print(state.e);
             }
           },
+          child: BlocBuilder<LoginBloc, LoginState>(
+            bloc: _loginBloc,
+            builder: (context, state) {
+              if (state is InitialLoginState) {
+                return _buildListView();
+                // } else if (state is LoginLoading) {
+                //   return ProgressBar();
+                // } else if (state is PessoaLoaded) {
+                //   return _buildListView();
+              } else {
+                return _buildListView();
+              }
+            },
+          ),
         ),
       ),
     );
@@ -141,14 +142,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildListView() {
     return ListView(
+      shrinkWrap: true,
       children: <Widget>[
-        // Padding(
-        //   padding: EdgeInsets.fromLTRB(32, 16, 16, 32),
-        //   child: _buildTabBar(),
-        // ),
-        Padding(
-            padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
-            child: _buildTabEntrar()),
+        Center(
+          child: Padding(
+              padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+              child: _buildTabEntrar()),
+        ),
       ],
     );
   }
@@ -156,13 +156,37 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildTabEntrar() {
     return Form(
       key: _formKey,
-      child: Column(
-        children: [
-          _buildCampoCpf(),
-          _buildCampoSenha(),
-          // _buildEsqueciSenhaButton(),
-          _buildLoginButton(),
-        ],
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildTitulo(),
+            SizedBox(height: 10),
+            _buildCampoCpf(),
+            SizedBox(height: 10),
+            _buildCampoSenha(),
+            // _buildEsqueciSenhaButton(),
+            SizedBox(height: 10),
+            _buildLoginButton(),
+            SizedBox(height: 10),
+            _buildEsqueciSenhaButton(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _buildTitulo() {
+    return Container(
+      alignment: Alignment.center,
+      child: Text(
+        'PetSmart',
+        style: TextStyle(
+          fontSize: 24,
+          color: Theme.of(context).primaryColor,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -227,6 +251,25 @@ class _LoginScreenState extends State<LoginScreen> {
       onPressed: () {
         _submitForm();
       },
+    );
+  }
+
+  _buildEsqueciSenhaButton() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: GestureDetector(
+        onTap: () {
+          // Form esqueci minha senha
+          // _submitForm();
+        },
+        child: Container(
+          child: Text(
+            'Esqueci minha senha',
+            style: TextStyle(fontSize: 18, color: Colors.black),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+        ),
+      ),
     );
   }
 }

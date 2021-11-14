@@ -87,4 +87,20 @@ class PessoaProvider {
       return UsuarioLogadoModel();
     }
   }
+
+  Future<PessoaModel> fetchDadosUsuario(int idPessoa, String token) async {
+    final url = '${Constants.baseUrl}/usuarios/$idPessoa${Constants.nomedb}';
+    final response = await this.newHttpClient.get(
+      url,
+      headers: {HttpHeaders.authorizationHeader: 'Bearer $token'},
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw InternalServerException(msg: Strings.erroComunicaoServidor);
+    }
+
+    print(response.body);
+    final Map<String, dynamic> responseData = jsonDecode(response.body);
+    return PessoaModel.fromJson(responseData);
+  }
 }

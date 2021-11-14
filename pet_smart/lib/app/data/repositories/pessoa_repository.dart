@@ -13,6 +13,10 @@ class PessoaRepository {
     return await pessoaApiClient.login(cpf, senha);
   }
 
+  Future<PessoaModel> getDadosUsuario(int idPessoa, String token) async {
+    return await pessoaApiClient.fetchDadosUsuario(idPessoa, token);
+  }
+
   // Verifica se a conta do usuario é Cliente ou Fornecedor
   Future<UsuarioLogadoModel> getUserConfig(int idPessoa, String token) async {
     return await pessoaApiClient.fetchUser(idPessoa, token);

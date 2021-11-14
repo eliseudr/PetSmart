@@ -106,7 +106,7 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                   //Carregar a imagem
                   _buildLogo(),
-                  SizedBox(height: 80),
+                  SizedBox(height: 40),
                   //Titulo
                   _buildTitulo(),
                   SizedBox(

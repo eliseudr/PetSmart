@@ -1,21 +1,56 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'package:pet_smart/app/data/bloc/dados_pessoa/dados_pessoa.dart';
+import 'package:pet_smart/app/data/bloc/dados_pessoa/dados_pessoa_bloc.dart';
+import 'package:pet_smart/app/data/bloc/file/file_bloc.dart';
+import 'package:pet_smart/app/data/models/pessoa_model.dart';
 import 'package:pet_smart/app/data/models/usuario_logado_model.dart';
+import 'package:pet_smart/app/data/providers/arquivo_provider.dart';
+import 'package:pet_smart/app/data/providers/pessoa_provider.dart';
+import 'package:pet_smart/app/data/repositories/arquivo_repository.dart';
+import 'package:pet_smart/app/data/repositories/pessoa_repository.dart';
 import 'package:pet_smart/app/pages/landing_page/landing_page.dart';
 
 class HomeCliente extends StatefulWidget {
+  final PessoaRepository pessoaRepository = PessoaRepository(
+      pessoaApiClient: PessoaProvider(httpClient: http.Client()));
+  final ArquivoRepository arquivoRepository = ArquivoRepository(
+      arquivoApiClient: ArquivoProvider(httpClient: http.Client()));
   final UsuarioLogadoModel usuarioLogado;
 
-  const HomeCliente({Key key, this.usuarioLogado}) : super(key: key);
+  HomeCliente({Key key, this.usuarioLogado}) : super(key: key);
 
   @override
-  _HomeClienteState createState() => _HomeClienteState();
+  _HomeClienteState createState() {
+    return _HomeClienteState();
+  }
 }
 
-class _HomeClienteState extends State<HomeCliente> {
+class _HomeClienteState extends State<HomeCliente>
+    with AutomaticKeepAliveClientMixin<HomeCliente> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  DadosPessoaBloc _dadosPessoaBloc;
+  FileBloc _fileBloc;
+  FileBloc _fileBlocSend;
+  Completer<void> _refreshCompleter;
+
+  @override
+  void initState() {
+    _dadosPessoaBloc =
+        DadosPessoaBloc(pessoaRepository: widget.pessoaRepository);
+    _dadosPessoaBloc.add(FetchDadosPessoa(
+        idPessoa: widget.usuarioLogado.id, token: widget.usuarioLogado.token));
+    _fileBloc = FileBloc(arquivoRepository: widget.arquivoRepository);
+    _fileBlocSend = FileBloc(arquivoRepository: widget.arquivoRepository);
+    _refreshCompleter = Completer<void>();
+    super.initState();
+  }
 
   //Text Serviços
   _buildServicos() {
@@ -25,7 +60,7 @@ class _HomeClienteState extends State<HomeCliente> {
       child: Column(
         children: <Widget>[
           Text(
-            'Solicitação de Serviços',
+            'Solicitar de Serviços',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
           ),
         ],
@@ -131,7 +166,7 @@ class _HomeClienteState extends State<HomeCliente> {
   //Text Meus animais
   _buildMeusPets() {
     return Container(
-      padding: EdgeInsets.only(top: 12, left: 12),
+      padding: EdgeInsets.only(left: 12),
       alignment: Alignment.topLeft,
       child: Column(
         children: <Widget>[
@@ -151,10 +186,7 @@ class _HomeClienteState extends State<HomeCliente> {
         elevation: 10,
         child: Column(
           children: <Widget>[
-            Icon(
-              Icons.add,
-              size: 100,
-            ),
+            Icon(Icons.add, size: 100),
           ],
         ),
         shape: RoundedRectangleBorder(
@@ -203,64 +235,53 @@ class _HomeClienteState extends State<HomeCliente> {
         });
   }
 
-  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       key: _scaffoldKey,
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    return BlocBuilder<DadosPessoaBloc, DadosPessoaState>(
+      bloc: _dadosPessoaBloc,
+      builder: (context, state) {
+        if (state is InitialDadosPessoaState) {
+          return Container();
+        } else if (state is DadosPessoaLoading) {
+          return _buildProgressBar();
+        } else if (state is DadosPessoaLoaded) {
+          _refreshCompleter?.complete();
+          _refreshCompleter = Completer();
+          return RefreshIndicator(
+              child: _buildHomeCliente(state.pessoa),
+              onRefresh: () {
+                // reloadPage();
+                return _refreshCompleter.future;
+              });
+        } else {
+          return Text('ERROR !!!!');
+        }
+      },
+    );
+  }
+
+  Widget _buildHomeCliente(PessoaModel pessoa) {
+    return Scaffold(
       appBar: new AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(
           color: Colors.black87,
         ),
-        title: Text('USUARIO LOGADO - CLIENTE',
+        title: Text('${pessoa.nome} - CLIENTE',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
                 fontSize: 16)),
         centerTitle: true,
       ),
-      drawer: new Drawer(
-        child: ListView(
-          children: <Widget>[
-            new UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.white12,
-              ),
-              accountName: new Text(
-                'NOME DA CONTA',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                    fontSize: 16),
-              ),
-              accountEmail: new Text(
-                'E-MAIL',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                    fontSize: 14),
-              ),
-              currentAccountPicture: new CircleAvatar(
-                backgroundImage:
-                    NetworkImage('https://source.unsplash.com/random'),
-                backgroundColor: Colors.transparent,
-              ),
-            ),
-            //LIST TILE MOSTRAS AS OPÇOES NO APPBAR
-            //Campor Perfil
-            buildListTileCustomizado(Icons.person, 'Perfil', () => {}),
-            //Campo Notificações
-            buildListTileCustomizado(
-                Icons.notifications, 'Notificações', () => {}),
-            //Campo Configurações
-            buildListTileCustomizado(Icons.settings, 'Configurações', () {}),
-            //Campo Sair
-            buildListTileCustomizado(Icons.exit_to_app, 'Sair', () {
-              _createDialogoAlertaSair(context);
-            }),
-          ],
-        ),
-      ),
+      drawer: buildDrawerMenu(context, pessoa),
       body: Container(
         color: Colors.white,
         child: Form(
@@ -268,17 +289,10 @@ class _HomeClienteState extends State<HomeCliente> {
           child: Column(
             children: <Widget>[
               // _buildMenu(),
-              SizedBox(
-                height: 40,
-              ),
               _buildServicos(),
-              SizedBox(
-                height: 12,
-              ),
+              SizedBox(height: 12),
               _buildListServicos(),
-              SizedBox(
-                height: 12,
-              ),
+              SizedBox(height: 12),
               _buildMeusPets(),
 
               Expanded(
@@ -298,9 +312,71 @@ class _HomeClienteState extends State<HomeCliente> {
     );
   }
 
+  Widget _buildProgressBar() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Drawer buildDrawerMenu(BuildContext context, PessoaModel pessoa) {
+    return new Drawer(
+      child: ListView(
+        children: <Widget>[
+          new UserAccountsDrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.white12,
+            ),
+            accountName: new Text(
+              '${pessoa.nome}',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                  fontSize: 16),
+            ),
+            accountEmail: new Text(
+              '${pessoa.email}',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                  fontSize: 14),
+            ),
+            currentAccountPicture: new CircleAvatar(
+              backgroundImage:
+                  NetworkImage('https://source.unsplash.com/random'),
+              backgroundColor: Colors.transparent,
+            ),
+          ),
+          //LIST TILE MOSTRAS AS OPÇOES NO APPBAR
+          //Campor Perfil
+          buildListTileCustomizado(Icons.person, 'Perfil', () => {}),
+          //Campo Notificações
+          buildListTileCustomizado(
+              Icons.notifications, 'Notificações', () => {}),
+          //Campo Configurações
+          buildListTileCustomizado(Icons.settings, 'Configurações', () {}),
+          //Campo Sair
+          buildListTileCustomizado(Icons.exit_to_app, 'Sair', () {
+            _createDialogoAlertaSair(context);
+          }),
+        ],
+      ),
+    );
+  }
+
   Future _signOut() async {
     // await _auth.signOut();
   }
+
+  @override
+  void dispose() {
+    _dadosPessoaBloc.close();
+    _fileBloc.close();
+    _fileBlocSend.close();
+    super.dispose();
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 //Customizar Botoes APPBAR
