@@ -6,6 +6,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pet_smart/app/data/bloc/dados_pessoa/dados_pessoa.dart';
 import 'package:pet_smart/app/data/bloc/dados_pessoa/dados_pessoa_bloc.dart';
 import 'package:pet_smart/app/data/bloc/file/file_bloc.dart';
@@ -16,6 +17,7 @@ import 'package:pet_smart/app/data/providers/pessoa_provider.dart';
 import 'package:pet_smart/app/data/repositories/arquivo_repository.dart';
 import 'package:pet_smart/app/data/repositories/pessoa_repository.dart';
 import 'package:pet_smart/app/pages/landing_page/landing_page.dart';
+import 'package:pet_smart/app/pages/home/home_cliente/home_cliente_modal_pet.dart';
 
 class HomeCliente extends StatefulWidget {
   final PessoaRepository pessoaRepository = PessoaRepository(
@@ -180,7 +182,7 @@ class _HomeClienteState extends State<HomeCliente>
   }
 
   //Botao Inserir animais
-  _buildBtnInserirAnimais() {
+  _buildBtnInserirAnimais(context) {
     return Container(
       child: RaisedButton(
         elevation: 10,
@@ -196,7 +198,8 @@ class _HomeClienteState extends State<HomeCliente>
         color: Colors.teal.shade100,
         textColor: Colors.white,
         onPressed: () {
-          //todo formInserirAnimal
+          return showBarModalBottomSheet(
+              context: context, builder: (context) => HomeModelPet());
         },
       ),
     );
@@ -300,7 +303,7 @@ class _HomeClienteState extends State<HomeCliente>
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    _buildBtnInserirAnimais(),
+                    _buildBtnInserirAnimais(context),
                     //todo campos meus pets
                   ],
                 ),

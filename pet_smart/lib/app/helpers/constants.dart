@@ -25,6 +25,7 @@ class Constants {
   static const String contaFornecedor = 'conta_fornecedor';
   static const String prefs = 'prefs';
   static const String usuarioLogado = 'usuario_logado';
+  static const String adicionarPet = 'Adicionar Pet';
 
   // Error
   static const String error = 'error';
