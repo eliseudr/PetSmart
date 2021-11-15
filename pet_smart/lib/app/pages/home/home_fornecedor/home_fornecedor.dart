@@ -60,7 +60,7 @@ class _HomeFornecedorState extends State<HomeFornecedor>
       child: Column(
         children: <Widget>[
           Text(
-            'Solicitar de Serviços',
+            'Meus serviços',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
           ),
         ],
@@ -171,7 +171,7 @@ class _HomeFornecedorState extends State<HomeFornecedor>
       child: Column(
         children: <Widget>[
           Text(
-            'Meus Animais',
+            'Adicionar serviço',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
           ),
         ],

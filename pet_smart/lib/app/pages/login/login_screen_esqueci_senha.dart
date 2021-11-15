@@ -15,7 +15,7 @@ class _LoginModalEsqueciSenhaState extends State<LoginModalEsqueciSenha> {
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.5,
+        height: MediaQuery.of(context).size.height * 0.43,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
           child: Form(

@@ -42,10 +42,17 @@ class _RegistroTelaState extends State<RegistroTela> {
   }
 
   _buildTitulo() {
-    return Container(
-      child: Text(
-        'Registre-se PetSmart',
-        style: TextStyle(fontSize: 24, color: Colors.black54.withOpacity(0.5)),
+    return RichText(
+      text: TextSpan(
+        text: "Registre-se no ",
+        style: TextStyle(color: Colors.black, fontSize: 24),
+        children: <TextSpan>[
+          TextSpan(
+              text: 'PetSmart',
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+              )),
+        ],
       ),
     );
   }
@@ -85,6 +92,34 @@ class _RegistroTelaState extends State<RegistroTela> {
         controller: _displayNome,
         decoration: new InputDecoration(
           labelText: "Usúario..",
+          fillColor: Colors.white,
+          border: new OutlineInputBorder(
+              borderRadius: new BorderRadius.circular(15.0),
+              borderSide: new BorderSide(color: Colors.blueGrey)),
+          prefixIcon: Icon(Icons.perm_identity),
+        ),
+        validator: (String value) {
+          if (value.isEmpty) {
+            return "Nome invalido";
+          }
+          return null;
+        },
+        keyboardType: TextInputType.text,
+        style: new TextStyle(color: Colors.blueGrey),
+        onSaved: (String value) {
+          formData['nome'] = value;
+        },
+      ),
+    );
+  }
+
+  _buildCampoCpf() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+      child: TextFormField(
+        controller: _displayNome,
+        decoration: new InputDecoration(
+          labelText: "Cpf..",
           fillColor: Colors.white,
           border: new OutlineInputBorder(
               borderRadius: new BorderRadius.circular(15.0),
@@ -194,46 +229,35 @@ class _RegistroTelaState extends State<RegistroTela> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            //Botao arrow voltar do IOs
-            SizedBox(
-              height: 8,
-            ),
+            SizedBox(height: 8),
             _buildBtnVoltar(),
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  //Campo Titulo
-                  _buildTitulo(),
-                  SizedBox(
-                    height: 10,
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      //Campo Titulo
+                      _buildTitulo(),
+                      SizedBox(height: 10),
+                      //Campo digitavel email
+                      _buildCampoEmail(),
+                      SizedBox(height: 10),
+                      _buildCampoCpf(),
+                      SizedBox(height: 10),
+                      //Campo digitavel username
+                      _buildCampoNome(),
+                      SizedBox(height: 10),
+                      // Campo digitavel password
+                      _buildCampoSenha(),
+                      SizedBox(height: 10),
+                      //Campo confirmar a senha
+                      _buildCampoConfirmarSenha(),
+                      SizedBox(height: 10),
+                      //Validar senhas ao pressionar o botão
+                      _buildBtnFinalizar(),
+                    ],
                   ),
-                  //Campo digitavel email
-                  _buildCampoEmail(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  //Campo digitavel username
-                  _buildCampoNome(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  // Campo digitavel password
-                  _buildCampoSenha(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  //Campo confirmar a senha
-                  _buildCampoConfirmarSenha(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  //Botao finalizar cadastro
-                  //Validar senhas ao pressionar o botão
-                  _buildBtnFinalizar(),
-                  //
-                ],
+                ),
               ),
             )
           ],
