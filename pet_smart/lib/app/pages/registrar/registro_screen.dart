@@ -10,6 +10,7 @@ class _RegistroTelaState extends State<RegistroTela> {
   String senha;
   String confirmSenha;
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> formData = {
     'nome': null,
@@ -25,6 +26,7 @@ class _RegistroTelaState extends State<RegistroTela> {
   _buildBtnVoltar() {
     return Container(
       width: 1000,
+      height: 10,
       alignment: Alignment.topLeft,
       child: IconButton(
         icon: Icon(Icons.arrow_back_ios),
@@ -54,11 +56,13 @@ class _RegistroTelaState extends State<RegistroTela> {
       child: TextFormField(
         controller: _displayEmail,
         decoration: new InputDecoration(
-            labelText: "E-mail..",
-            fillColor: Colors.white,
-            border: new OutlineInputBorder(
-                borderRadius: new BorderRadius.circular(15.0),
-                borderSide: new BorderSide(color: Colors.blueGrey))),
+          labelText: "E-mail..",
+          fillColor: Colors.white,
+          border: new OutlineInputBorder(
+              borderRadius: new BorderRadius.circular(15.0),
+              borderSide: new BorderSide(color: Colors.blueGrey)),
+          prefixIcon: Icon(Icons.email_outlined),
+        ),
         validator: (val) {
           if (val.length == 0) {
             return "O campo E-mail não pode ser vazio";
@@ -80,11 +84,13 @@ class _RegistroTelaState extends State<RegistroTela> {
       child: TextFormField(
         controller: _displayNome,
         decoration: new InputDecoration(
-            labelText: "Usúario..",
-            fillColor: Colors.white,
-            border: new OutlineInputBorder(
-                borderRadius: new BorderRadius.circular(15.0),
-                borderSide: new BorderSide(color: Colors.blueGrey))),
+          labelText: "Usúario..",
+          fillColor: Colors.white,
+          border: new OutlineInputBorder(
+              borderRadius: new BorderRadius.circular(15.0),
+              borderSide: new BorderSide(color: Colors.blueGrey)),
+          prefixIcon: Icon(Icons.perm_identity),
+        ),
         validator: (String value) {
           if (value.isEmpty) {
             return "Nome invalido";
@@ -107,11 +113,13 @@ class _RegistroTelaState extends State<RegistroTela> {
         controller: _displaySenha,
         obscureText: true,
         decoration: new InputDecoration(
-            labelText: "Senha..",
-            fillColor: Colors.white,
-            border: new OutlineInputBorder(
-                borderRadius: new BorderRadius.circular(15.0),
-                borderSide: new BorderSide(color: Colors.blueGrey))),
+          labelText: "Senha..",
+          fillColor: Colors.white,
+          border: new OutlineInputBorder(
+              borderRadius: new BorderRadius.circular(15.0),
+              borderSide: new BorderSide(color: Colors.blueGrey)),
+          prefixIcon: Icon(Icons.vpn_key_outlined),
+        ),
         validator: (val) {
           if (val.length == 0) {
             return "O campo senha não pode ser vazio";
@@ -134,11 +142,13 @@ class _RegistroTelaState extends State<RegistroTela> {
         controller: _displayConfirmSenha,
         obscureText: true,
         decoration: new InputDecoration(
-            labelText: "Confirme sua senha..",
-            fillColor: Colors.white,
-            border: new OutlineInputBorder(
-                borderRadius: new BorderRadius.circular(15.0),
-                borderSide: new BorderSide(color: Colors.blueGrey))),
+          labelText: "Confirme sua senha..",
+          fillColor: Colors.white,
+          border: new OutlineInputBorder(
+              borderRadius: new BorderRadius.circular(15.0),
+              borderSide: new BorderSide(color: Colors.blueGrey)),
+          prefixIcon: Icon(Icons.vpn_key_outlined),
+        ),
         validator: (String val) {
           if (val.length == 0) {
             return "O campo senha não pode ser vazio";
@@ -179,56 +189,54 @@ class _RegistroTelaState extends State<RegistroTela> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              //Botao arrow voltar do IOs
-              SizedBox(
-                height: 8,
+      key: _scaffoldKey,
+      body: Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            //Botao arrow voltar do IOs
+            SizedBox(
+              height: 8,
+            ),
+            _buildBtnVoltar(),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  //Campo Titulo
+                  _buildTitulo(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  //Campo digitavel email
+                  _buildCampoEmail(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  //Campo digitavel username
+                  _buildCampoNome(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  // Campo digitavel password
+                  _buildCampoSenha(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  //Campo confirmar a senha
+                  _buildCampoConfirmarSenha(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  //Botao finalizar cadastro
+                  //Validar senhas ao pressionar o botão
+                  _buildBtnFinalizar(),
+                  //
+                ],
               ),
-              _buildBtnVoltar(),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    //Campo Titulo
-                    _buildTitulo(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    //Campo digitavel email
-                    _buildCampoEmail(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    //Campo digitavel username
-                    _buildCampoNome(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    // Campo digitavel password
-                    _buildCampoSenha(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    //Campo confirmar a senha
-                    _buildCampoConfirmarSenha(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    //Botao finalizar cadastro
-                    //Validar senhas ao pressionar o botão
-                    _buildBtnFinalizar(),
-                    //
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );

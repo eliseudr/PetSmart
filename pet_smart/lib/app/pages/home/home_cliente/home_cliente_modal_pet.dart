@@ -15,24 +15,30 @@ class _HomeModelPetState extends State<HomeModelPet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.6,
+    return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-        child: Form(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                Constants.adicionarPet,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.6,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+            child: Form(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    Constants.adicionarPet,
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  _buildNomePet(),
+                  _buildNascimento(),
+                  _buildRowRadio(),
+                  _buildNomeRaca(),
+                  _buildBtnAdicionar(),
+                ],
               ),
-              _buildNomePet(),
-              _buildNascimento(),
-              _buildRowRadio(),
-              _buildNomeRaca(),
-              _buildBtnAdicionar(),
-            ],
+            ),
           ),
         ),
       ),
@@ -165,7 +171,7 @@ class _HomeModelPetState extends State<HomeModelPet> {
             color: Theme.of(context).primaryColor,
             textColor: Colors.white,
             onPressed: () {
-              // TODO: fechar modal e enviar novo animal
+              Navigator.pop(context);
             },
           ),
         ),

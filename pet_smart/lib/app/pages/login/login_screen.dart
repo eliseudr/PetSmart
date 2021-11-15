@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pet_smart/app/data/bloc/login/login_bloc.dart';
 import 'package:pet_smart/app/data/bloc/login/login_event.dart';
 import 'package:pet_smart/app/data/bloc/login/login_state.dart';
@@ -10,6 +11,7 @@ import 'package:pet_smart/app/helpers/shared_prefs.dart';
 import 'package:pet_smart/app/helpers/utils.dart';
 import 'package:pet_smart/app/pages/home/home_cliente/home_cliente.dart';
 import 'package:pet_smart/app/pages/home/home_fornecedor/home_fornecedor.dart';
+import 'package:pet_smart/app/pages/login/login_screen_esqueci_senha.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -154,24 +156,28 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildTabEntrar() {
-    return Form(
-      key: _formKey,
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildTitulo(),
-            SizedBox(height: 10),
-            _buildCampoCpf(),
-            SizedBox(height: 10),
-            _buildCampoSenha(),
-            // _buildEsqueciSenhaButton(),
-            SizedBox(height: 10),
-            _buildLoginButton(),
-            SizedBox(height: 10),
-            _buildEsqueciSenhaButton(),
-          ],
+    return Padding(
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: Form(
+        key: _formKey,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildTitulo(),
+              SizedBox(height: 10),
+              _buildCampoCpf(),
+              SizedBox(height: 10),
+              _buildCampoSenha(),
+              // _buildEsqueciSenhaButton(),
+              SizedBox(height: 10),
+              _buildLoginButton(),
+              SizedBox(height: 10),
+              _buildEsqueciSenhaButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -197,11 +203,13 @@ class _LoginScreenState extends State<LoginScreen> {
       child: TextFormField(
         controller: _cpfController,
         decoration: new InputDecoration(
-            labelText: "Cpf",
-            fillColor: Colors.white,
-            border: new OutlineInputBorder(
-                borderRadius: new BorderRadius.circular(15.0),
-                borderSide: new BorderSide(color: Colors.blueGrey))),
+          labelText: "Cpf",
+          fillColor: Colors.white,
+          border: new OutlineInputBorder(
+              borderRadius: new BorderRadius.circular(15.0),
+              borderSide: new BorderSide(color: Colors.blueGrey)),
+          prefixIcon: Icon(Icons.perm_identity),
+        ),
         validator: (input) {
           if (input.isEmpty) {
             return 'Cpf incorreto';
@@ -224,7 +232,8 @@ class _LoginScreenState extends State<LoginScreen> {
             fillColor: Colors.white,
             border: new OutlineInputBorder(
                 borderRadius: new BorderRadius.circular(15.0),
-                borderSide: new BorderSide(color: Colors.blueGrey))),
+                borderSide: new BorderSide(color: Colors.blueGrey)),
+            prefixIcon: Icon(Icons.vpn_key_outlined)),
         validator: (input) {
           if (input.isEmpty) {
             return 'Senha incorreta';
@@ -259,8 +268,8 @@ class _LoginScreenState extends State<LoginScreen> {
       alignment: Alignment.bottomCenter,
       child: GestureDetector(
         onTap: () {
-          // Form esqueci minha senha
-          // _submitForm();
+          return showBarModalBottomSheet(
+              context: context, builder: (context) => LoginModalEsqueciSenha());
         },
         child: Container(
           child: Text(
