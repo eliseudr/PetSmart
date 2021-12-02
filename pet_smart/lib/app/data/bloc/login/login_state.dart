@@ -23,7 +23,6 @@ class LoginLoaded extends LoginState {
   LoginLoaded({@required this.pessoa}) : assert(pessoa != null);
 }
 
-//
 class LoginError extends LoginState {
   final Exception e;
 

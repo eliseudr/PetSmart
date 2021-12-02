@@ -13,6 +13,11 @@ class PessoaRepository {
     return await pessoaApiClient.login(cpf, senha);
   }
 
+  Future<PessoaModel> singup(
+      String email, String nome, String cpf, String senha, int cliente) async {
+    return await pessoaApiClient.singup(email, nome, cpf, senha, 1);
+  }
+
   Future<PessoaModel> getDadosUsuario(int idPessoa, String token) async {
     return await pessoaApiClient.fetchDadosUsuario(idPessoa, token);
   }

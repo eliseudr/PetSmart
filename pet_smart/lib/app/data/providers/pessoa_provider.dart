@@ -53,6 +53,36 @@ class PessoaProvider {
     );
   }
 
+  // CORRIGIR
+  Future<PessoaModel> singup(
+      String email, String nome, String cpf, String senha, int cliente) async {
+    final Map<String, dynamic> dados = {
+      'email': email,
+      'nome': nome,
+      'cpf': cpf,
+      'senha': senha,
+      'cliente': cliente
+    };
+
+    final url = '${Constants.baseUrl}/criar_login${Constants.nomedb}';
+    print(dados);
+
+    final response = await this.httpClient.post(url,
+        headers: {HttpHeaders.contentTypeHeader: Constants.applicationJson},
+        body: json.encode(dados));
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      if (response.statusCode == 401) {
+        throw UnauthorizedException(
+            msg: jsonDecode(response.body)[Constants.error]);
+      } else {
+        throw InternalServerException(msg: Strings.erroComunicaoServidor);
+      }
+    }
+    final Map<String, dynamic> responseData = jsonDecode(response.body);
+    return responseData[Constants.mensagem];
+  }
+
   /// No aplicativo há dois tipos de usuários
   /// 1. Conta Cliente: Home page onde o usuario pode gerencias seus pets e solicitar servicos.
   /// 2. Conta Fornecedor: São os funcionários/Empresas que forneceram os serviços para a plataforma.

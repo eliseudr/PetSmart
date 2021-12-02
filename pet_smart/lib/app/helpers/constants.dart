@@ -3,10 +3,11 @@ class Constants {
   static const String cpfMask = '000.000.000-00';
 
   // API
-  static const String baseUrl = 'http://192.168.0.14:3000';
+  static const String baseUrl = 'http://192.168.0.50:3000';
   static const String nomedb = '?nomedb=petsmart';
   static const applicationJson = 'application/json';
   static const String token = 'token';
+  static const String mensagem = 'mensagem';
 
   // Formulários Model
   static const String id = 'id';

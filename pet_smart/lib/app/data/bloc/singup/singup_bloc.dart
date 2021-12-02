@@ -5,33 +5,33 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
-import 'package:pet_smart/app/data/bloc/login/login_event.dart';
-import 'package:pet_smart/app/data/bloc/login/login_state.dart';
+import 'package:pet_smart/app/data/bloc/singup/singup_event.dart';
+import 'package:pet_smart/app/data/bloc/singup/singup_state.dart';
 import 'package:pet_smart/app/data/models/pessoa_model.dart';
 import 'package:pet_smart/app/data/repositories/pessoa_repository.dart';
 
-class LoginBloc extends Bloc<LoginEvent, LoginState> {
+class SingupBloc extends Bloc<SingupEvent, SingupState> {
   final PessoaRepository pessoaRepository;
 
-  LoginBloc({@required this.pessoaRepository})
+  SingupBloc({@required this.pessoaRepository})
       : assert(pessoaRepository != null);
 
-  LoginState get initialState => InitialLoginState();
+  SingupState get initialState => InitialSingupState();
 
   @override
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    if (event is Login) {
-      yield LoginLoading();
+  Stream<SingupState> mapEventToState(SingupEvent event) async* {
+    if (event is Singup) {
+      yield SingupLoading();
       try {
-        final PessoaModel pessoa =
-            await pessoaRepository.login(event.cpf, event.senha);
-        yield LoginLoaded(pessoa: pessoa);
+        await pessoaRepository.singup(
+            event.email, event.nome, event.cpf, event.senha, event.cliente);
+        yield SingupLoaded();
       } catch (e) {
         print(e);
-        yield LoginError(e: e);
+        yield SingupError(e: e);
       }
     } else if (event is GetPessoa) {
-      yield LoginLoading();
+      yield SingupLoading();
 
       // final prefs = await SharedPreferences.getInstance();
 

@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pet_smart/app/data/bloc/singup/singup.dart';
+import 'package:pet_smart/app/data/bloc/singup/singup_bloc.dart';
+import 'package:pet_smart/app/data/providers/pessoa_provider.dart';
+import 'package:pet_smart/app/data/repositories/pessoa_repository.dart';
 import 'package:pet_smart/app/pages/landing_page/landing_page.dart';
+import 'package:http/http.dart' as http;
+import 'package:pet_smart/app/pages/login/login_screen.dart';
 
 class RegistroTela extends StatefulWidget {
+  final PessoaRepository _pessoaRepository = PessoaRepository(
+    pessoaApiClient: PessoaProvider(
+      httpClient: http.Client(),
+    ),
+  );
+
   @override
   _RegistroTelaState createState() => _RegistroTelaState();
 }
@@ -18,10 +31,39 @@ class _RegistroTelaState extends State<RegistroTela> {
     'senha': null,
     'confirmSenha': null
   };
-  TextEditingController _displayEmail = TextEditingController();
-  TextEditingController _displayNome = TextEditingController();
-  TextEditingController _displaySenha = TextEditingController();
-  TextEditingController _displayConfirmSenha = TextEditingController();
+  final _displayEmail = TextEditingController();
+  final _displayNome = TextEditingController();
+  final _displaySenha = TextEditingController();
+  final _displayCpf = TextEditingController();
+  final _displayConfirmSenha = TextEditingController();
+  SingupBloc _singupBloc;
+
+  @override
+  void initState() {
+    _singupBloc = SingupBloc(
+      pessoaRepository: widget._pessoaRepository,
+    );
+
+    super.initState();
+  }
+
+  void _submitForm() async {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+    }
+    // Salvar usuario no SharedPreferences
+    // print(_cpfController.text);
+    // print(_senhaController.text);
+    _singupBloc.add(
+      Singup(
+        email: _displayEmail.text,
+        nome: _displayNome.text,
+        cpf: _displayCpf.text,
+        senha: _displaySenha.text,
+        cliente: 1,
+      ),
+    );
+  }
 
   _buildBtnVoltar() {
     return Container(
@@ -117,7 +159,7 @@ class _RegistroTelaState extends State<RegistroTela> {
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: TextFormField(
-        controller: _displayNome,
+        controller: _displayCpf,
         decoration: new InputDecoration(
           labelText: "Cpf..",
           fillColor: Colors.white,
@@ -213,10 +255,8 @@ class _RegistroTelaState extends State<RegistroTela> {
       padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
       color: Theme.of(context).primaryColor,
       textColor: Colors.white,
-      onPressed: () async {
-        if (_formKey.currentState.validate()) {
-          _registrarConta();
-        }
+      onPressed: () {
+        _submitForm();
       },
     );
   }
@@ -225,46 +265,61 @@ class _RegistroTelaState extends State<RegistroTela> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 8),
-            _buildBtnVoltar(),
-            Expanded(
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      //Campo Titulo
-                      _buildTitulo(),
-                      SizedBox(height: 10),
-                      //Campo digitavel email
-                      _buildCampoEmail(),
-                      SizedBox(height: 10),
-                      _buildCampoCpf(),
-                      SizedBox(height: 10),
-                      //Campo digitavel username
-                      _buildCampoNome(),
-                      SizedBox(height: 10),
-                      // Campo digitavel password
-                      _buildCampoSenha(),
-                      SizedBox(height: 10),
-                      //Campo confirmar a senha
-                      _buildCampoConfirmarSenha(),
-                      SizedBox(height: 10),
-                      //Validar senhas ao pressionar o botão
-                      _buildBtnFinalizar(),
-                    ],
+      body: Center(
+        child: BlocListener<SingupBloc, SingupState>(
+          bloc: _singupBloc,
+          listener: (context, state) {
+            if (state is SingupLoaded) {
+              print('Criando Login de: ${_displayNome.text}');
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute<bool>(builder: (context) => LoginScreen()),
+                (Route<dynamic> route) => false,
+              );
+            } else if (state is SingupError) {
+              print(state.e);
+            }
+          },
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 8),
+                _buildBtnVoltar(),
+                Expanded(
+                  child: Center(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          //Campo Titulo
+                          _buildTitulo(),
+                          SizedBox(height: 10),
+                          //Campo digitavel email
+                          _buildCampoEmail(),
+                          SizedBox(height: 10),
+                          _buildCampoCpf(),
+                          SizedBox(height: 10),
+                          //Campo digitavel username
+                          _buildCampoNome(),
+                          SizedBox(height: 10),
+                          // Campo digitavel password
+                          _buildCampoSenha(),
+                          SizedBox(height: 10),
+                          //Campo confirmar a senha
+                          _buildCampoConfirmarSenha(),
+                          SizedBox(height: 10),
+                          //Validar senhas ao pressionar o botão
+                          _buildBtnFinalizar(),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            )
-          ],
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
-
-  void _registrarConta() async {}
 }
