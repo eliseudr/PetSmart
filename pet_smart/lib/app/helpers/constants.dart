@@ -29,6 +29,11 @@ class Constants {
   static const String adicionarPet = 'Adicionar Pet';
   static const String redefinirSenha = 'Redefinir senha';
 
+  static const String apelido = 'apelido';
+  static const String nascimento = 'nascimento';
+  static const String raca = 'raca';
+  static const String idUsuario = 'id_usuario';
+
   // MSG
   static const String msgRecuperarSenha =
       'Para recuperar a senha é necessario inserir o E-mail que foi registrando sua conta, o procedimento será continuado pelo E-mail.';

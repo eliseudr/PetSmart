@@ -37,6 +37,7 @@ class HomeCliente extends StatefulWidget {
 class _HomeClienteState extends State<HomeCliente>
     with AutomaticKeepAliveClientMixin<HomeCliente> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  UsuarioLogadoModel _usuarioLogado = UsuarioLogadoModel();
   DadosPessoaBloc _dadosPessoaBloc;
   FileBloc _fileBloc;
   FileBloc _fileBlocSend;
@@ -51,6 +52,7 @@ class _HomeClienteState extends State<HomeCliente>
     _fileBloc = FileBloc(arquivoRepository: widget.arquivoRepository);
     _fileBlocSend = FileBloc(arquivoRepository: widget.arquivoRepository);
     _refreshCompleter = Completer<void>();
+
     super.initState();
   }
 
@@ -199,7 +201,10 @@ class _HomeClienteState extends State<HomeCliente>
         textColor: Colors.white,
         onPressed: () {
           return showBarModalBottomSheet(
-              context: context, builder: (context) => HomeModelPet());
+              context: context,
+              builder: (context) => HomeModelPet(
+                  idUsuario: widget.usuarioLogado.id,
+                  token: widget.usuarioLogado.token));
         },
       ),
     );

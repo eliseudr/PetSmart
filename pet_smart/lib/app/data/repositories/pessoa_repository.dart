@@ -18,6 +18,12 @@ class PessoaRepository {
     return await pessoaApiClient.singup(email, nome, cpf, senha, 1);
   }
 
+  Future<PessoaModel> addPet(String apelido, String nascimento, String raca,
+      int idUsuario, String token) async {
+    return await pessoaApiClient.addPet(
+        apelido, nascimento, raca, idUsuario, token);
+  }
+
   Future<PessoaModel> getDadosUsuario(int idPessoa, String token) async {
     return await pessoaApiClient.fetchDadosUsuario(idPessoa, token);
   }

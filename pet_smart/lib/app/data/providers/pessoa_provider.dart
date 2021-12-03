@@ -53,7 +53,7 @@ class PessoaProvider {
     );
   }
 
-  // CORRIGIR
+  // Chama o Endpoint para registrar um novo usuario
   Future<PessoaModel> singup(
       String email, String nome, String cpf, String senha, int cliente) async {
     final Map<String, dynamic> dados = {
@@ -69,6 +69,38 @@ class PessoaProvider {
 
     final response = await this.httpClient.post(url,
         headers: {HttpHeaders.contentTypeHeader: Constants.applicationJson},
+        body: json.encode(dados));
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      if (response.statusCode == 401) {
+        throw UnauthorizedException(
+            msg: jsonDecode(response.body)[Constants.error]);
+      } else {
+        throw InternalServerException(msg: Strings.erroComunicaoServidor);
+      }
+    }
+    final Map<String, dynamic> responseData = jsonDecode(response.body);
+    return responseData[Constants.mensagem];
+  }
+
+  // TESTAR
+  Future<PessoaModel> addPet(String apelido, String nascimento, String raca,
+      int idUsuario, String token) async {
+    final Map<String, dynamic> dados = {
+      'apelido': apelido,
+      'nascimento': nascimento,
+      'raca': raca,
+      'id_usuario': idUsuario
+    };
+
+    final url = '${Constants.baseUrl}/pets${Constants.nomedb}';
+    print(dados);
+
+    final response = await this.httpClient.post(url,
+        headers: {
+          HttpHeaders.contentTypeHeader: Constants.applicationJson,
+          HttpHeaders.authorizationHeader: "Bearer $token"
+        },
         body: json.encode(dados));
 
     if (response.statusCode != 200 && response.statusCode != 201) {

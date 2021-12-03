@@ -25,6 +25,15 @@ class SharedPrefs {
     };
   }
 
+  /// Retorna o usuário que está logado no aplicativo [UsuarioLogadoModel],
+  /// que fica salvo no [SharedPreferences].
+  Future<UsuarioLogadoModel> getUsuarioLogado() async {
+    final prefs = await SharedPreferences.getInstance();
+    UsuarioLogadoModel usuarioLogado = UsuarioLogadoModel.fromJson(
+        json.decode(prefs.getString(Constants.usuarioLogado)));
+    return usuarioLogado;
+  }
+
   Future<UsuarioLogadoModel> saveUsuarioLogado() async {
     final prefsPessoa = await getPessoaPrefs();
 
