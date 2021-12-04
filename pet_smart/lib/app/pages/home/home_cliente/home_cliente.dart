@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pet_smart/app/data/bloc/dados_pessoa/dados_pessoa.dart';
 import 'package:pet_smart/app/data/bloc/dados_pessoa/dados_pessoa_bloc.dart';
+import 'package:pet_smart/app/data/bloc/dados_pets_pessoa/dados__pet_pessoa.dart';
 import 'package:pet_smart/app/data/bloc/file/file_bloc.dart';
 import 'package:pet_smart/app/data/models/pessoa_model.dart';
 import 'package:pet_smart/app/data/models/usuario_logado_model.dart';
@@ -16,6 +17,7 @@ import 'package:pet_smart/app/data/providers/arquivo_provider.dart';
 import 'package:pet_smart/app/data/providers/pessoa_provider.dart';
 import 'package:pet_smart/app/data/repositories/arquivo_repository.dart';
 import 'package:pet_smart/app/data/repositories/pessoa_repository.dart';
+import 'package:pet_smart/app/pages/home/home_cliente/widgets/btn_addPet.dart';
 import 'package:pet_smart/app/pages/landing_page/landing_page.dart';
 import 'package:pet_smart/app/pages/home/home_cliente/home_cliente_modal_pet.dart';
 
@@ -37,23 +39,36 @@ class HomeCliente extends StatefulWidget {
 class _HomeClienteState extends State<HomeCliente>
     with AutomaticKeepAliveClientMixin<HomeCliente> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  UsuarioLogadoModel _usuarioLogado = UsuarioLogadoModel();
   DadosPessoaBloc _dadosPessoaBloc;
+  DadosPetPessoaBloc _dadosPetPessoaBloc;
   FileBloc _fileBloc;
   FileBloc _fileBlocSend;
   Completer<void> _refreshCompleter;
 
   @override
   void initState() {
+    // Pessoa
     _dadosPessoaBloc =
         DadosPessoaBloc(pessoaRepository: widget.pessoaRepository);
     _dadosPessoaBloc.add(FetchDadosPessoa(
         idPessoa: widget.usuarioLogado.id, token: widget.usuarioLogado.token));
+    // Pets
+    _dadosPetPessoaBloc =
+        DadosPetPessoaBloc(pessoaRepository: widget.pessoaRepository);
+    _dadosPetPessoaBloc.add(FetchDadosPetPessoa(
+        idPessoa: widget.usuarioLogado.id, token: widget.usuarioLogado.token));
+
     _fileBloc = FileBloc(arquivoRepository: widget.arquivoRepository);
     _fileBlocSend = FileBloc(arquivoRepository: widget.arquivoRepository);
     _refreshCompleter = Completer<void>();
 
     super.initState();
+  }
+
+  void reloadPage() {
+    // Pets
+    _dadosPetPessoaBloc.add(FetchDadosPetPessoa(
+        idPessoa: widget.usuarioLogado.id, token: widget.usuarioLogado.token));
   }
 
   //Text Serviços
@@ -88,7 +103,7 @@ class _HomeClienteState extends State<HomeCliente>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(40),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
                   child: Image.asset(
                     'assets/Imagens/Consulta.jpg',
                     height: 130,
@@ -115,7 +130,7 @@ class _HomeClienteState extends State<HomeCliente>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(40),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
                   child: Image.asset(
                     'assets/Imagens/Banho.jpg',
                     height: 130,
@@ -142,7 +157,7 @@ class _HomeClienteState extends State<HomeCliente>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(40),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
                   child: Image.asset(
                     'assets/Imagens/Tosa.jpg',
                     height: 130,
@@ -183,31 +198,43 @@ class _HomeClienteState extends State<HomeCliente>
     );
   }
 
-  //Botao Inserir animais
+  //Botao Inserir animais OU lista de Pets
   _buildBtnInserirAnimais(context) {
-    return Container(
-      child: RaisedButton(
-        elevation: 10,
-        child: Column(
-          children: <Widget>[
-            Icon(Icons.add, size: 100),
-          ],
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 30),
-        color: Colors.teal.shade100,
-        textColor: Colors.white,
-        onPressed: () {
-          return showBarModalBottomSheet(
-              context: context,
-              builder: (context) => HomeModelPet(
-                  idUsuario: widget.usuarioLogado.id,
-                  token: widget.usuarioLogado.token));
-        },
-      ),
-    );
+    return BlocBuilder<DadosPetPessoaBloc, DadosPetPessoaState>(
+        bloc: _dadosPetPessoaBloc,
+        builder: (context, state) {
+          if (state is InitialDadosPetPessoaState) {
+            return Container();
+          } else if (state is DadosPetPessoaLoading) {
+            return _buildProgressBar();
+          } else if (state is DadosPetPessoaLoaded) {
+            if (state.pets.length > 0) {
+              return Container(
+                height: 360,
+                child: ListView.builder(
+                  padding: EdgeInsets.all(12),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.pets.length,
+                  itemBuilder: (context, index) => Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: Colors.amber,
+                    ),
+                    margin: EdgeInsets.only(right: 16),
+                    height: 400,
+                    width: 220,
+                    child: Text(state.pets[index].apelido),
+                  ),
+                ),
+              );
+            } else {
+              return BtnAdicionarAnimal(widget: widget, reloadPage: reloadPage);
+            }
+          } else {
+            return Text('ERROR !!!!');
+          }
+        });
   }
 
   //Popout window para confirmação de 2 etapas
@@ -252,26 +279,27 @@ class _HomeClienteState extends State<HomeCliente>
   }
 
   Widget _buildBody() {
-    return BlocBuilder<DadosPessoaBloc, DadosPessoaState>(
-      bloc: _dadosPessoaBloc,
-      builder: (context, state) {
-        if (state is InitialDadosPessoaState) {
-          return Container();
-        } else if (state is DadosPessoaLoading) {
-          return _buildProgressBar();
-        } else if (state is DadosPessoaLoaded) {
-          _refreshCompleter?.complete();
-          _refreshCompleter = Completer();
-          return RefreshIndicator(
-              child: _buildHomeCliente(state.pessoa),
-              onRefresh: () {
-                // reloadPage();
-                return _refreshCompleter.future;
-              });
-        } else {
-          return Text('ERROR !!!!');
-        }
+    return RefreshIndicator(
+      onRefresh: () async {
+        _refreshCompleter?.complete();
+        _refreshCompleter = Completer();
+        reloadPage();
+        return;
       },
+      child: BlocBuilder<DadosPessoaBloc, DadosPessoaState>(
+        bloc: _dadosPessoaBloc,
+        builder: (context, state) {
+          if (state is InitialDadosPessoaState) {
+            return Container();
+          } else if (state is DadosPessoaLoading) {
+            return _buildProgressBar();
+          } else if (state is DadosPessoaLoaded) {
+            return _buildHomeCliente(state.pessoa);
+          } else {
+            return Text('ERROR !!!!');
+          }
+        },
+      ),
     );
   }
 
@@ -292,8 +320,7 @@ class _HomeClienteState extends State<HomeCliente>
       drawer: buildDrawerMenu(context, pessoa),
       body: Container(
         color: Colors.white,
-        child: Form(
-          //todo if need formKey
+        child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               // _buildMenu(),
@@ -302,19 +329,11 @@ class _HomeClienteState extends State<HomeCliente>
               _buildListServicos(),
               SizedBox(height: 12),
               _buildMeusPets(),
-
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    _buildBtnInserirAnimais(context),
-                    //todo campos meus pets
-                  ],
-                ),
-              )
+              _buildBtnInserirAnimais(context),
             ],
           ),
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
         ),
       ),
     );

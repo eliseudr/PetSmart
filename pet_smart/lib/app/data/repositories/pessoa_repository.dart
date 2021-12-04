@@ -1,4 +1,5 @@
 import 'package:pet_smart/app/data/models/pessoa_model.dart';
+import 'package:pet_smart/app/data/models/pet_model.dart';
 import 'package:pet_smart/app/data/models/usuario_logado_model.dart';
 import 'package:pet_smart/app/data/providers/pessoa_provider.dart';
 import 'package:meta/meta.dart';
@@ -26,6 +27,12 @@ class PessoaRepository {
 
   Future<PessoaModel> getDadosUsuario(int idPessoa, String token) async {
     return await pessoaApiClient.fetchDadosUsuario(idPessoa, token);
+  }
+
+  Future<List<PetModel>> getDadosPetUsuario(
+      {int idPessoa, String token}) async {
+    return await pessoaApiClient.fetchDadosPetUsuario(
+        idPessoa: idPessoa, token: token);
   }
 
   // Verifica se a conta do usuario é Cliente ou Fornecedor

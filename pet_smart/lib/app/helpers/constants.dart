@@ -33,6 +33,7 @@ class Constants {
   static const String nascimento = 'nascimento';
   static const String raca = 'raca';
   static const String idUsuario = 'id_usuario';
+  static const String tags = 'tags';
 
   // MSG
   static const String msgRecuperarSenha =

@@ -12,7 +12,8 @@ class PetModel {
   final String apelido;
   final String nascimento;
   final String raca;
-  final String idUsuario;
+  final int idUsuario;
+  final List<String> tags;
 
   PetModel({
     @required this.id,
@@ -20,14 +21,17 @@ class PetModel {
     @required this.nascimento,
     this.raca,
     @required this.idUsuario,
+    this.tags,
   });
 
   static PetModel fromJson(dynamic json) {
     return PetModel(
-        id: json[Constants.id],
-        apelido: json[Constants.apelido],
-        nascimento: json[Constants.nascimento],
-        raca: json[Constants.raca],
-        idUsuario: json[Constants.idUsuario]);
+      id: json[Constants.id],
+      apelido: json[Constants.apelido],
+      nascimento: json[Constants.nascimento],
+      raca: json[Constants.raca],
+      idUsuario: json[Constants.idUsuario],
+      tags: json[Constants.tags] != null ? json[Constants.tags].split(',') : [],
+    );
   }
 }

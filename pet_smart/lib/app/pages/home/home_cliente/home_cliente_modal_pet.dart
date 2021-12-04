@@ -8,7 +8,7 @@ import 'package:pet_smart/app/data/providers/pessoa_provider.dart';
 import 'package:pet_smart/app/data/repositories/pessoa_repository.dart';
 import 'package:http/http.dart' as http;
 
-class HomeModelPet extends StatefulWidget {
+class HomeModalPet extends StatefulWidget {
   final PessoaRepository _pessoaRepository = PessoaRepository(
     pessoaApiClient: PessoaProvider(
       httpClient: http.Client(),
@@ -16,14 +16,19 @@ class HomeModelPet extends StatefulWidget {
   );
   final int idUsuario;
   final String token;
-  HomeModelPet({Key key, @required this.idUsuario, @required this.token})
+  final VoidCallback reloadPage;
+  HomeModalPet(
+      {Key key,
+      @required this.idUsuario,
+      @required this.token,
+      this.reloadPage})
       : super(key: key);
 
   @override
-  _HomeModelPetState createState() => _HomeModelPetState();
+  _HomeModalPetState createState() => _HomeModalPetState();
 }
 
-class _HomeModelPetState extends State<HomeModelPet> {
+class _HomeModalPetState extends State<HomeModalPet> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   DadosPessoaBloc _dadosPessoaBloc;
@@ -250,5 +255,8 @@ class _HomeModelPetState extends State<HomeModelPet> {
           idUsuario: widget.idUsuario,
           token: widget.token),
     );
+
+    Future.delayed(Duration(milliseconds: 500))
+        .then((value) => widget.reloadPage());
   }
 }

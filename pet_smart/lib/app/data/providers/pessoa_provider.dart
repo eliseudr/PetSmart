@@ -6,6 +6,7 @@ import 'package:pet_smart/app/data/httpInterceptor.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:pet_smart/app/data/models/pessoa_model.dart';
+import 'package:pet_smart/app/data/models/pet_model.dart';
 import 'package:pet_smart/app/data/models/usuario_logado_model.dart';
 import 'package:pet_smart/app/helpers/exceptions/exceptions.dart';
 import 'package:pet_smart/app/helpers/strings.dart';
@@ -164,5 +165,29 @@ class PessoaProvider {
     print(response.body);
     final Map<String, dynamic> responseData = jsonDecode(response.body);
     return PessoaModel.fromJson(responseData);
+  }
+
+  Future<List<PetModel>> fetchDadosPetUsuario(
+      {int idPessoa, String token}) async {
+    final url =
+        '${Constants.baseUrl}/pets${Constants.nomedb}&id_usuario=$idPessoa';
+    final response = await this.newHttpClient.get(
+      url,
+      headers: {HttpHeaders.authorizationHeader: 'Bearer $token'},
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw InternalServerException(msg: Strings.erroComunicaoServidor);
+    }
+
+    List<dynamic> responseData = jsonDecode(response.body);
+
+    List<PetModel> fetchDadosPetUsuario = [];
+
+    print(response.body);
+    responseData?.forEach((dynamic singlePet) {
+      fetchDadosPetUsuario.add(PetModel.fromJson(singlePet));
+    });
+    return fetchDadosPetUsuario;
   }
 }
