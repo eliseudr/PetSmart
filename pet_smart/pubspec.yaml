@@ -61,8 +61,13 @@ flutter:
     - assets/Imagens/Banho.jpg
     - assets/Imagens/Consulta.jpg
     - assets/Imagens/Tosa.jpg
-#    - assets/Imagens/user.png
-
+    - assets/Imagens/pets/dog-1.png
+    - assets/Imagens/pets/dog-2.png
+    - assets/Imagens/pets/dog-3.png
+    - assets/Imagens/pets/dog-4.png
+    - assets/Imagens/pets/dog-5.png
+    - assets/Imagens/pets/dog-6.png
+    # - assets/Imagens/user.png
 # An image asset can refer to one or more resolution-specific "variants", see
 # https://flutter.dev/assets-and-images/#resolution-aware.
 

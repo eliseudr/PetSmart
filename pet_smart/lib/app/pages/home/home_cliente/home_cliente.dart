@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'dart:math';
 import 'package:pet_smart/app/data/bloc/dados_pessoa/dados_pessoa.dart';
 import 'package:pet_smart/app/data/bloc/dados_pessoa/dados_pessoa_bloc.dart';
 import 'package:pet_smart/app/data/bloc/dados_pets_pessoa/dados__pet_pessoa.dart';
@@ -19,7 +20,8 @@ import 'package:pet_smart/app/data/repositories/arquivo_repository.dart';
 import 'package:pet_smart/app/data/repositories/pessoa_repository.dart';
 import 'package:pet_smart/app/pages/home/home_cliente/widgets/btn_addPet.dart';
 import 'package:pet_smart/app/pages/landing_page/landing_page.dart';
-import 'package:pet_smart/app/pages/home/home_cliente/home_cliente_modal_pet.dart';
+
+import 'home_cliente_modal_pet.dart';
 
 class HomeCliente extends StatefulWidget {
   final PessoaRepository pessoaRepository = PessoaRepository(
@@ -44,6 +46,7 @@ class _HomeClienteState extends State<HomeCliente>
   FileBloc _fileBloc;
   FileBloc _fileBlocSend;
   Completer<void> _refreshCompleter;
+  Random random = new Random();
 
   @override
   void initState() {
@@ -90,30 +93,41 @@ class _HomeClienteState extends State<HomeCliente>
   //LISTA DE SERVIÇOS (COSULTA, BANHO, TOSA.. ETC)
   _buildListServicos() {
     return Padding(
-      padding: const EdgeInsets.only(left: 12),
+      padding: const EdgeInsets.only(left: 10),
       child: Container(
         height: 160,
         child: ListView(
-          padding: EdgeInsets.only(
-            right: 12,
-          ),
+          padding: EdgeInsets.only(right: 10),
           scrollDirection: Axis.horizontal,
           children: <Widget>[
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Image.asset(
-                    'assets/Imagens/Consulta.jpg',
+                Padding(
+                  padding: const EdgeInsets.only(left: 6, top: 4),
+                  child: Container(
                     height: 130,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.9),
+                          spreadRadius: 2,
+                          blurRadius: 7,
+                          offset: Offset(0, 2), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      child: Image.asset(
+                        'assets/Imagens/Consulta.jpg',
+                      ),
+                    ),
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 35),
+                  padding: const EdgeInsets.only(left: 35, top: 8),
                   child: Text(
                     'Consultar',
                     style: TextStyle(
@@ -123,24 +137,34 @@ class _HomeClienteState extends State<HomeCliente>
               ],
             ),
             //Segunda Imagem
-            SizedBox(
-              width: 14,
-            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Image.asset(
-                    'assets/Imagens/Banho.jpg',
+                Padding(
+                  padding: const EdgeInsets.only(left: 14, top: 4),
+                  child: Container(
                     height: 130,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.9),
+                          spreadRadius: 2,
+                          blurRadius: 7,
+                          offset: Offset(0, 2), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      child: Image.asset(
+                        'assets/Imagens/Banho.jpg',
+                      ),
+                    ),
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 45),
+                  padding: const EdgeInsets.only(left: 58, top: 8),
                   child: Text(
                     'Banho',
                     style: TextStyle(
@@ -149,25 +173,34 @@ class _HomeClienteState extends State<HomeCliente>
                 ),
               ],
             ),
-            //Terceira imagem
-            SizedBox(
-              width: 14,
-            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Image.asset(
-                    'assets/Imagens/Tosa.jpg',
+                Padding(
+                  padding: const EdgeInsets.only(left: 14, top: 4),
+                  child: Container(
                     height: 130,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.9),
+                          spreadRadius: 2,
+                          blurRadius: 7,
+                          offset: Offset(0, 2), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      child: Image.asset(
+                        'assets/Imagens/Tosa.jpg',
+                      ),
+                    ),
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 45),
+                  padding: const EdgeInsets.only(left: 58, top: 8),
                   child: Text(
                     'Tosa',
                     style: TextStyle(
@@ -199,7 +232,7 @@ class _HomeClienteState extends State<HomeCliente>
   }
 
   //Botao Inserir animais OU lista de Pets
-  _buildBtnInserirAnimais(context) {
+  _buildAnimais(context) {
     return BlocBuilder<DadosPetPessoaBloc, DadosPetPessoaState>(
         bloc: _dadosPetPessoaBloc,
         builder: (context, state) {
@@ -216,16 +249,8 @@ class _HomeClienteState extends State<HomeCliente>
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemCount: state.pets.length,
-                  itemBuilder: (context, index) => Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      color: Colors.amber,
-                    ),
-                    margin: EdgeInsets.only(right: 16),
-                    height: 400,
-                    width: 220,
-                    child: Text(state.pets[index].apelido),
-                  ),
+                  itemBuilder: (context, index) =>
+                      _singlePetWidget(state, index),
                 ),
               );
             } else {
@@ -235,6 +260,86 @@ class _HomeClienteState extends State<HomeCliente>
             return Text('ERROR !!!!');
           }
         });
+  }
+
+  _singlePetWidget(DadosPetPessoaLoaded state, int index) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 6),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: Colors.grey[100],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.7),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ],
+        ),
+        margin: EdgeInsets.only(right: 16),
+        height: 400,
+        width: 220,
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 12),
+              child: Container(
+                height: 200,
+                width: 180,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  image: DecorationImage(
+                      image: AssetImage(
+                          'assets/Imagens/pets/dog-${random.nextInt(5) + 1}.png')),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Container(
+                height: 20,
+                width: 180,
+                child: Text(state.pets[index].apelido,
+                    textAlign: TextAlign.center,
+                    style:
+                        TextStyle(fontWeight: FontWeight.w800, fontSize: 22)),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Container(
+                height: 20,
+                width: 180,
+                child: Text(state.pets[index].raca,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16)),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Container(
+                height: 20,
+                width: 180,
+                child: Text(
+                    'Última solicitação há ${random.nextInt(5) + 1} dias',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 12)),
+              ),
+            ),
+            Container(
+              height: 30,
+              width: 180,
+              child: RaisedButton(
+                  color: Colors.teal[200],
+                  child: new Text("Consultar mais dados"),
+                  onPressed: () => {}),
+            ), //abrir detalhes Pet)
+          ],
+        ),
+      ),
+    );
   }
 
   //Popout window para confirmação de 2 etapas
@@ -275,6 +380,19 @@ class _HomeClienteState extends State<HomeCliente>
     return Scaffold(
       key: _scaffoldKey,
       body: _buildBody(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          return showBarModalBottomSheet(
+              context: context,
+              builder: (context) => HomeModalPet(
+                  idUsuario: widget.usuarioLogado.id,
+                  token: widget.usuarioLogado.token,
+                  reloadPage: reloadPage));
+        },
+        child: const Icon(Icons.add),
+        backgroundColor: Colors.orange.withOpacity(0.5),
+        elevation: 0,
+      ),
     );
   }
 
@@ -308,7 +426,7 @@ class _HomeClienteState extends State<HomeCliente>
       appBar: new AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(
-          color: Colors.black87,
+          color: Colors.orange,
         ),
         title: Text('${pessoa.nome} - CLIENTE',
             style: TextStyle(
@@ -329,7 +447,7 @@ class _HomeClienteState extends State<HomeCliente>
               _buildListServicos(),
               SizedBox(height: 12),
               _buildMeusPets(),
-              _buildBtnInserirAnimais(context),
+              _buildAnimais(context),
             ],
           ),
           physics: const BouncingScrollPhysics(
