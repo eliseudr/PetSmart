@@ -5,6 +5,7 @@ import 'package:http_interceptor/http_client_with_interceptor.dart';
 import 'package:pet_smart/app/data/httpInterceptor.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
+import 'package:pet_smart/app/data/models/agendamento_model.dart';
 import 'package:pet_smart/app/data/models/pessoa_model.dart';
 import 'package:pet_smart/app/data/models/pet_model.dart';
 import 'package:pet_smart/app/data/models/usuario_logado_model.dart';
@@ -84,7 +85,7 @@ class PessoaProvider {
     return responseData[Constants.mensagem];
   }
 
-  // TESTAR
+  // Post pet
   Future<PessoaModel> addPet(String apelido, String nascimento, String raca,
       int idUsuario, String token) async {
     final Map<String, dynamic> dados = {
@@ -95,6 +96,44 @@ class PessoaProvider {
     };
 
     final url = '${Constants.baseUrl}/pets${Constants.nomedb}';
+    print(dados);
+
+    final response = await this.httpClient.post(url,
+        headers: {
+          HttpHeaders.contentTypeHeader: Constants.applicationJson,
+          HttpHeaders.authorizationHeader: "Bearer $token"
+        },
+        body: json.encode(dados));
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      if (response.statusCode == 401) {
+        throw UnauthorizedException(
+            msg: jsonDecode(response.body)[Constants.error]);
+      } else {
+        throw InternalServerException(msg: Strings.erroComunicaoServidor);
+      }
+    }
+    final Map<String, dynamic> responseData = jsonDecode(response.body);
+    return responseData[Constants.mensagem];
+  }
+
+  // TESTAR
+  Future<AgendamentoModel> addAgendamento(
+      String tipoAgendamento,
+      String dtAgendamento,
+      int idPet,
+      int idFornecedor,
+      int idUsuario,
+      String token) async {
+    final Map<String, dynamic> dados = {
+      'tipo_agendamento': tipoAgendamento,
+      'data_agendamento': dtAgendamento,
+      'id_pet': idPet,
+      'id_fornecedor': idFornecedor,
+      'id_usuario': idUsuario
+    };
+
+    final url = '${Constants.baseUrl}/agendamentos${Constants.nomedb}';
     print(dados);
 
     final response = await this.httpClient.post(url,

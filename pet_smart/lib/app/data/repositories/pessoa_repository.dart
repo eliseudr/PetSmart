@@ -1,3 +1,4 @@
+import 'package:pet_smart/app/data/models/agendamento_model.dart';
 import 'package:pet_smart/app/data/models/pessoa_model.dart';
 import 'package:pet_smart/app/data/models/pet_model.dart';
 import 'package:pet_smart/app/data/models/usuario_logado_model.dart';
@@ -23,6 +24,17 @@ class PessoaRepository {
       int idUsuario, String token) async {
     return await pessoaApiClient.addPet(
         apelido, nascimento, raca, idUsuario, token);
+  }
+
+  Future<AgendamentoModel> addAgendamento(
+      String tipoAgendamento,
+      String dtAgendamento,
+      int idPet,
+      int idFornecedor,
+      int idUsuario,
+      String token) async {
+    return await pessoaApiClient.addAgendamento(
+        tipoAgendamento, dtAgendamento, idPet, idFornecedor, idUsuario, token);
   }
 
   Future<PessoaModel> getDadosUsuario(int idPessoa, String token) async {

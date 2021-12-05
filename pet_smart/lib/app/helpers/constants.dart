@@ -29,6 +29,12 @@ class Constants {
   static const String adicionarPet = 'Adicionar Pet';
   static const String redefinirSenha = 'Redefinir senha';
 
+  // Agendamento
+  static const String tipoAgendamento = 'tipo_agendamento';
+  static const String dtAgendamento = 'data_agendamento';
+  static const String idPet = 'id_pet';
+  static const String idFornecedor = 'id_fornecedor';
+
   static const String apelido = 'apelido';
   static const String nascimento = 'nascimento';
   static const String raca = 'raca';

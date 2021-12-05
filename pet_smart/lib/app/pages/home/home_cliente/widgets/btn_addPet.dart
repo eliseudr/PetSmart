@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:pet_smart/app/pages/home/home_cliente/home_cliente_modal_pet.dart';
+import 'package:pet_smart/app/pages/home/home_cliente/modal_pet.dart';
 
 import '../home_cliente.dart';
 

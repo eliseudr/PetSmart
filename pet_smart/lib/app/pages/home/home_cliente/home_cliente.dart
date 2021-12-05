@@ -18,10 +18,11 @@ import 'package:pet_smart/app/data/providers/arquivo_provider.dart';
 import 'package:pet_smart/app/data/providers/pessoa_provider.dart';
 import 'package:pet_smart/app/data/repositories/arquivo_repository.dart';
 import 'package:pet_smart/app/data/repositories/pessoa_repository.dart';
+import 'package:pet_smart/app/pages/home/home_cliente/modal_agendamento.dart';
 import 'package:pet_smart/app/pages/home/home_cliente/widgets/btn_addPet.dart';
 import 'package:pet_smart/app/pages/landing_page/landing_page.dart';
 
-import 'home_cliente_modal_pet.dart';
+import 'modal_pet.dart';
 
 class HomeCliente extends StatefulWidget {
   final PessoaRepository pessoaRepository = PessoaRepository(
@@ -74,7 +75,7 @@ class _HomeClienteState extends State<HomeCliente>
         idPessoa: widget.usuarioLogado.id, token: widget.usuarioLogado.token));
   }
 
-  //Text Serviços
+  //Titulo Serviços
   _buildServicos() {
     return Container(
       padding: EdgeInsets.only(top: 12, left: 12),
@@ -105,23 +106,34 @@ class _HomeClienteState extends State<HomeCliente>
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(left: 6, top: 4),
-                  child: Container(
-                    height: 130,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.9),
-                          spreadRadius: 2,
-                          blurRadius: 7,
-                          offset: Offset(0, 2), // changes position of shadow
+                  child: GestureDetector(
+                    onTap: () => {
+                      showBarModalBottomSheet(
+                          context: context,
+                          builder: (context) => AgendamentoModalPet(
+                              tipoAgendamento: 'Consulta',
+                              idUsuario: widget.usuarioLogado.id,
+                              token: widget.usuarioLogado.token,
+                              reloadPage: reloadPage))
+                    },
+                    child: Container(
+                      height: 130,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.9),
+                            spreadRadius: 2,
+                            blurRadius: 7,
+                            offset: Offset(0, 2), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        child: Image.asset(
+                          'assets/Imagens/Consulta.jpg',
                         ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      child: Image.asset(
-                        'assets/Imagens/Consulta.jpg',
                       ),
                     ),
                   ),
@@ -215,7 +227,7 @@ class _HomeClienteState extends State<HomeCliente>
     );
   }
 
-  //Text Meus animais
+  //Titulo Meus animais
   _buildMeusPets() {
     return Container(
       padding: EdgeInsets.only(left: 12),
