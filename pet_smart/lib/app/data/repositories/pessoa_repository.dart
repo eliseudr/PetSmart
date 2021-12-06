@@ -47,6 +47,12 @@ class PessoaRepository {
         idPessoa: idPessoa, token: token);
   }
 
+  Future<List<AgendamentoModel>> getDadosAgendamentosUsuario(
+      {int idFornecedor, String token}) async {
+    return await pessoaApiClient.fetchDadosAgendamentosUsuario(
+        idFornecedor: idFornecedor, token: token);
+  }
+
   // Verifica se a conta do usuario é Cliente ou Fornecedor
   Future<UsuarioLogadoModel> getUserConfig(int idPessoa, String token) async {
     return await pessoaApiClient.fetchUser(idPessoa, token);

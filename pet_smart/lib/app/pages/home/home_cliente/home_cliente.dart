@@ -304,7 +304,7 @@ class _HomeClienteState extends State<HomeCliente>
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   image: DecorationImage(
                       image: AssetImage(
-                          'assets/Imagens/pets/dog-${random.nextInt(5) + 1}.png')),
+                          'assets/Imagens/pets/dog-${random.nextInt(12) + 1}.png')),
                 ),
               ),
             ),

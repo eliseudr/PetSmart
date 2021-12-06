@@ -229,4 +229,29 @@ class PessoaProvider {
     });
     return fetchDadosPetUsuario;
   }
+
+  Future<List<AgendamentoModel>> fetchDadosAgendamentosUsuario(
+      {int idFornecedor, String token}) async {
+    final url =
+        '${Constants.baseUrl}/agendamentos${Constants.nomedb}&id_fornecedor=$idFornecedor';
+    final response = await this.newHttpClient.get(
+      url,
+      headers: {HttpHeaders.authorizationHeader: 'Bearer $token'},
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw InternalServerException(msg: Strings.erroComunicaoServidor);
+    }
+
+    List<dynamic> responseData = jsonDecode(response.body);
+
+    List<AgendamentoModel> fetchDadosAgendamentosUsuario = [];
+
+    print(response.body);
+    responseData?.forEach((dynamic singleAgendamento) {
+      fetchDadosAgendamentosUsuario
+          .add(AgendamentoModel.fromJson(singleAgendamento));
+    });
+    return fetchDadosAgendamentosUsuario;
+  }
 }

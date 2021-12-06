@@ -27,6 +27,8 @@ class Constants {
   static const String prefs = 'prefs';
   static const String usuarioLogado = 'usuario_logado';
   static const String adicionarPet = 'Adicionar Pet';
+  static const String selecionarPet = 'Selecionar Pet';
+  static const String selecionarLoja = 'Selecionar Loja';
   static const String redefinirSenha = 'Redefinir senha';
 
   // Agendamento
@@ -34,6 +36,9 @@ class Constants {
   static const String dtAgendamento = 'data_agendamento';
   static const String idPet = 'id_pet';
   static const String idFornecedor = 'id_fornecedor';
+  static const String nomePet = 'nome_pet';
+  static const String nomeCliente = 'nome_cliente';
+  static const String nomeFornecedor = 'nome_fornecedor';
 
   static const String apelido = 'apelido';
   static const String nascimento = 'nascimento';

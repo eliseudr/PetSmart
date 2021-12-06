@@ -30,7 +30,7 @@ class AgendamentoModalPet extends StatefulWidget {
 
 class _ModalAgendamentoState extends State<AgendamentoModalPet> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  int idFornecedor = 2;
+  int idFornecedor;
   int idPet;
   String _dtAgendamento = "";
   String _dateTime;
@@ -39,6 +39,9 @@ class _ModalAgendamentoState extends State<AgendamentoModalPet> {
     'Simba (Leão)',
     'Chico',
     'Pipoca',
+  ];
+  var fornecedores = <String>[
+    'PetSpace       ',
   ];
   AgendamentoBloc _agendamentoBloc;
 
@@ -67,7 +70,7 @@ class _ModalAgendamentoState extends State<AgendamentoModalPet> {
         },
         child: SingleChildScrollView(
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.4,
+            height: MediaQuery.of(context).size.height * 0.5,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
               child: Form(
@@ -76,11 +79,17 @@ class _ModalAgendamentoState extends State<AgendamentoModalPet> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      Constants.adicionarPet,
+                      Constants.selecionarPet,
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     _buildSelecionarPet(),
+                    Text(
+                      Constants.selecionarLoja,
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    _buildSelecionarPrestador(),
                     _buildDtAgendamento(),
                     _buildBtnAdicionar(),
                   ],
@@ -101,7 +110,7 @@ class _ModalAgendamentoState extends State<AgendamentoModalPet> {
       style: const TextStyle(color: Colors.deepPurple),
       underline: Container(
         height: 2,
-        color: Colors.teal,
+        color: Colors.grey[300],
       ),
       items: pets.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
@@ -113,6 +122,32 @@ class _ModalAgendamentoState extends State<AgendamentoModalPet> {
         setState(() {
           idPet = pets.indexOf(value);
           print(idPet);
+        });
+      },
+    );
+  }
+
+  _buildSelecionarPrestador() {
+    return DropdownButton<String>(
+      // value: dropdownValue,
+      value: idFornecedor == null ? null : fornecedores[idFornecedor],
+      // elevation: 16,
+
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.grey[300],
+      ),
+      items: fornecedores.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          idFornecedor = fornecedores.indexOf(value);
+          print(idFornecedor);
         });
       },
     );
@@ -174,7 +209,6 @@ class _ModalAgendamentoState extends State<AgendamentoModalPet> {
             textColor: Colors.white,
             onPressed: () {
               _submitForm();
-              // Navigator.pop(context);
             },
           ),
         ),
@@ -187,6 +221,14 @@ class _ModalAgendamentoState extends State<AgendamentoModalPet> {
       // Gambiarra
       idPet = 20;
     }
+    if (idPet == 1) {
+      // Gambiarra
+      idPet = 21;
+    }
+    if (idFornecedor == 0) {
+      // Gambiarra
+      idFornecedor = 2;
+    }
 
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -196,7 +238,7 @@ class _ModalAgendamentoState extends State<AgendamentoModalPet> {
           tipoAgendamento: widget.tipoAgendamento,
           dtAgendamento: _dtAgendamento,
           idPet: idPet,
-          idFornecedor: widget.idUsuario,
+          idFornecedor: idFornecedor,
           idUsuario: widget.idUsuario,
           token: widget.token),
     );

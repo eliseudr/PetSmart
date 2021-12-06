@@ -10,19 +10,27 @@ import 'package:pet_smart/app/helpers/utils.dart';
 class AgendamentoModel {
   final int id;
   final String tipoAgendamento;
-  final String dtAgendamento;
   final int idPet;
-  final int idFornecedor;
+  final String nomePet;
+  final String raca;
+  final String dtAgendamento;
   final int idUsuario;
+  final String nomeCliente;
+  final int idFornecedor;
+  final String nomeFornecedor;
   final List<String> tags;
 
   AgendamentoModel({
     @required this.id,
     @required this.tipoAgendamento,
-    @required this.dtAgendamento,
     @required this.idPet,
-    @required this.idFornecedor,
+    @required this.nomePet,
+    @required this.raca,
+    @required this.dtAgendamento,
     @required this.idUsuario,
+    @required this.nomeCliente,
+    @required this.idFornecedor,
+    @required this.nomeFornecedor,
     this.tags,
   });
 
@@ -30,10 +38,14 @@ class AgendamentoModel {
     return AgendamentoModel(
       id: json[Constants.id],
       tipoAgendamento: json[Constants.tipoAgendamento],
-      dtAgendamento: json[Constants.dtAgendamento],
       idPet: json[Constants.idPet],
-      idFornecedor: json[Constants.idFornecedor],
+      nomePet: json[Constants.nomePet],
+      raca: json[Constants.raca],
+      dtAgendamento: json[Constants.dtAgendamento],
       idUsuario: json[Constants.idUsuario],
+      nomeCliente: json[Constants.nomeCliente],
+      idFornecedor: json[Constants.idFornecedor],
+      nomeFornecedor: json[Constants.nomeFornecedor],
       tags: json[Constants.tags] != null ? json[Constants.tags].split(',') : [],
     );
   }
