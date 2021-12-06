@@ -233,7 +233,7 @@ class _HomeFornecedorState extends State<HomeFornecedor>
   }
 
   //Lista de serviços - CRIAR BLOC SERVIÇOS
-  _buildBtnInserirAnimais() {
+  _buildBtnInserirAnimais(context) {
     return BlocBuilder<DadosAgendamentosBloc, DadosAgendamentosState>(
         bloc: _dadosAgendamentosBloc,
         builder: (context, state) {
@@ -255,7 +255,10 @@ class _HomeFornecedorState extends State<HomeFornecedor>
                 ),
               );
             } else {
-              // return BtnAdicionarAnimal(widget: widget, reloadPage: reloadPage);
+              return Container(
+                height: 500,
+              );
+              // BtnAdicionarAnimal(widget: widget, reloadPage: reloadPage);
             }
           } else {
             return Text('ERROR !!!!');
@@ -438,7 +441,7 @@ class _HomeFornecedorState extends State<HomeFornecedor>
               _buildListServicos(),
               SizedBox(height: 12),
               _buildMeusPets(),
-              _buildBtnInserirAnimais(),
+              _buildBtnInserirAnimais(context),
             ],
           ),
           physics: const BouncingScrollPhysics(

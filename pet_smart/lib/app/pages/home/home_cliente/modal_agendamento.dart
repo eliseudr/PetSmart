@@ -38,7 +38,6 @@ class _ModalAgendamentoState extends State<AgendamentoModalPet> {
   var pets = <String>[
     'Simba (Leão)',
     'Chico',
-    'Pipoca',
   ];
   var fornecedores = <String>[
     'PetSpace       ',
@@ -219,15 +218,16 @@ class _ModalAgendamentoState extends State<AgendamentoModalPet> {
   void _submitForm() async {
     if (idPet == 0) {
       // Gambiarra
-      idPet = 20;
-    }
-    if (idPet == 1) {
+      idPet = 1;
+      print(idPet);
+    } else {
       // Gambiarra
-      idPet = 21;
+      idPet = 2;
+      print(idPet);
     }
     if (idFornecedor == 0) {
       // Gambiarra
-      idFornecedor = 2;
+      idFornecedor = 1;
     }
 
     if (_formKey.currentState.validate()) {
