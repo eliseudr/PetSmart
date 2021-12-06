@@ -201,6 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: TextFormField(
+        keyboardType: TextInputType.number,
         controller: _cpfController,
         decoration: new InputDecoration(
           labelText: "Cpf",
