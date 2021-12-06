@@ -83,7 +83,7 @@ class _HomeClienteState extends State<HomeCliente>
       child: Column(
         children: <Widget>[
           Text(
-            'Solicitar de Serviços',
+            'Solicitar Serviços',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
           ),
         ],
